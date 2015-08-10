@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CapstoneCMD</RootNamespace>
-    <AssemblyName>CapstoneCMD</AssemblyName>
+    <AssemblyName>CSCapstoneCli</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,9 +42,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gee.External.Capstone\Gee.External.Capstone.csproj">
+    <ProjectReference Include="..\CSCapstone\CSCapstone.csproj">
       <Project>{1297DCEE-009D-4739-8124-3F064EA9EA10}</Project>
-      <Name>Gee.External.Capstone</Name>
+      <Name>CSCapstone</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
