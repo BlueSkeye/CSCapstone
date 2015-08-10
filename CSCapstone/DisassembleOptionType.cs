@@ -1,4 +1,4 @@
-﻿namespace Gee.External.Capstone {
+﻿namespace CSCapstone {
     /// <summary>
     ///     Disassemble Option Type.
     /// </summary>

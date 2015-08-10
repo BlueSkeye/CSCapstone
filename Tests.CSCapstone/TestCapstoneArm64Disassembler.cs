@@ -1,7 +1,7 @@
-﻿using Gee.External.Capstone;
+﻿using CSCapstone;
 using NUnit.Framework;
 
-namespace Tests.Gee.External.Capstone {
+namespace Tests.CSCapstone {
     /// <summary>
     ///     Test Capstone ARM64 Disassembler.
     /// </summary>

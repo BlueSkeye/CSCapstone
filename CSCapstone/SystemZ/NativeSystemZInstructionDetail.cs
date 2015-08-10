@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.SystemZ {
+namespace CSCapstone.SystemZ {
     /// <summary>
     ///     Native SystemZ Instruction Detail.
     /// </summary>

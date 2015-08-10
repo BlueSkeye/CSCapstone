@@ -1,6 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Gee.External.Capstone.X86 {
+namespace CSCapstone.X86 {
     /// <summary>
     ///     X86 Instruction.
     /// </summary>

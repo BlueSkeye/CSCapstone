@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.PowerPc {
+namespace CSCapstone.PowerPc {
     /// <summary>
     ///     Native ARM64 Instruction Memory Operand Value.
     /// </summary>

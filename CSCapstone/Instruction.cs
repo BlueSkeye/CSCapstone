@@ -1,4 +1,4 @@
-﻿namespace Gee.External.Capstone {
+﻿namespace CSCapstone {
     /// <summary>
     ///     Dissembled Instruction.
     /// </summary>

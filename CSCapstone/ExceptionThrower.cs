@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Exception Thrower.
     /// </summary>

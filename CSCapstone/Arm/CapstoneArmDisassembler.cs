@@ -1,4 +1,4 @@
-﻿namespace Gee.External.Capstone.Arm {
+﻿namespace CSCapstone.Arm {
     /// <summary>
     ///     Capstone ARM Disassembler.
     /// </summary>

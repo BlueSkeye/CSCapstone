@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Safe Capstone Handle.
     /// </summary>

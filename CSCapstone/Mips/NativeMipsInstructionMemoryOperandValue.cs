@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.Mips {
+namespace CSCapstone.Mips {
     /// <summary>
     ///     Native MIPS Instruction Memory Operand Value.
     /// </summary>

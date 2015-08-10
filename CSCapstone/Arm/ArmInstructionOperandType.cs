@@ -1,6 +1,6 @@
 ﻿#pragma warning disable 1591
 
-namespace Gee.External.Capstone.Arm {
+namespace CSCapstone.Arm {
     /// <summary>
     ///     ARM Instruction Operand Type.
     /// </summary>

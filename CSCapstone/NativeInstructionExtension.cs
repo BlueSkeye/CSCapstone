@@ -1,8 +1,8 @@
-﻿using Gee.External.Capstone.Arm;
-using Gee.External.Capstone.Arm64;
-using Gee.External.Capstone.X86;
+﻿using CSCapstone.Arm;
+using CSCapstone.Arm64;
+using CSCapstone.X86;
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Native Instruction Extension.
     /// </summary>

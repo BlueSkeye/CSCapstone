@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.Mips {
+namespace CSCapstone.Mips {
     /// <summary>
     ///     Native ARM64 Instruction Operand.
     /// </summary>

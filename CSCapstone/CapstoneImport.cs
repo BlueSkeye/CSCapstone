@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Capstone Import.
     /// </summary>

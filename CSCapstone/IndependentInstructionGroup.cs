@@ -1,6 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Architecture Independent Instruction Group.
     /// </summary>

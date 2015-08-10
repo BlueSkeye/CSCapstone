@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.Sparc {
+namespace CSCapstone.Sparc {
     /// <summary>
     ///     Native ARM64 Instruction Operand Value.
     /// </summary>

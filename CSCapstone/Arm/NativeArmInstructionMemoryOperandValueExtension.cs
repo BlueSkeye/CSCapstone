@@ -1,4 +1,4 @@
-﻿namespace Gee.External.Capstone.Arm {
+﻿namespace CSCapstone.Arm {
     /// <summary>
     ///     Native ARM Instruction Memory Operand Value Extension.
     /// </summary>

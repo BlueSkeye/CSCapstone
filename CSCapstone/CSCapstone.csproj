@@ -6,7 +6,7 @@
     <ProjectGuid>{1297DCEE-009D-4739-8124-3F064EA9EA10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gee.External.Capstone</RootNamespace>
+    <RootNamespace>CSCapstone</RootNamespace>
     <AssemblyName>CSCapstone</AssemblyName>
     <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

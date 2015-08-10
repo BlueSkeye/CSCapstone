@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.XCore {
+namespace CSCapstone.XCore {
     /// <summary>
     ///     Native XCore Instruction Operand.
     /// </summary>

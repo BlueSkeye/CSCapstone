@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.PowerPc {
+namespace CSCapstone.PowerPc {
     /// <summary>
     ///     Native PowerPC Instruction Detail.
     /// </summary>

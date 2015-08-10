@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.X86 {
+namespace CSCapstone.X86 {
     /// <summary>
     ///     Native X86 Instruction Operand Value.
     /// </summary>

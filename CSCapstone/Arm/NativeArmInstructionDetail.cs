@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.Arm {
+namespace CSCapstone.Arm {
     /// <summary>
     ///     Native ARM Instruction Detail.
     /// </summary>

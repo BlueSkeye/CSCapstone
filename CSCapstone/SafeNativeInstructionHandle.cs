@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Safe Native Instruction Handle.
     /// </summary>

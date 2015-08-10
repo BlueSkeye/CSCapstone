@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 #pragma warning disable 1591
 
-namespace Gee.External.Capstone.Arm {
+namespace CSCapstone.Arm {
     /// <summary>
     ///     ARM SYS Register.
     /// </summary>

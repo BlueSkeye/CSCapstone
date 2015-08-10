@@ -2,7 +2,7 @@
 
 #pragma warning disable 1591
 
-namespace Gee.External.Capstone.Arm {
+namespace CSCapstone.Arm {
     /// <summary>
     ///     ARM Shifter Type.
     /// </summary>

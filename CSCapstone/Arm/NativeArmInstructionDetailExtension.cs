@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Gee.External.Capstone.Arm {
+namespace CSCapstone.Arm {
     /// <summary>
     ///     Native ARM Instruction Detail Extension.
     /// </summary>

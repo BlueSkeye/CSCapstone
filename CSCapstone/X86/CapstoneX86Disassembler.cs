@@ -1,4 +1,4 @@
-﻿namespace Gee.External.Capstone.X86 {
+﻿namespace CSCapstone.X86 {
     /// <summary>
     ///     Capstone X86 Disassembler.
     /// </summary>

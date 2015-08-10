@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.Sparc {
+namespace CSCapstone.Sparc {
     /// <summary>
     ///     Native SPARC Instruction Detail.
     /// </summary>

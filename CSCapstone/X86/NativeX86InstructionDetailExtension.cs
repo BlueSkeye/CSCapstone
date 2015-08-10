@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Gee.External.Capstone.X86 {
+namespace CSCapstone.X86 {
     /// <summary>
     ///     Native X86 Instruction Detail Extension.
     /// </summary>

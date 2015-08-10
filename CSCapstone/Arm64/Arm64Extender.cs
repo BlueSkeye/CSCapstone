@@ -1,6 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Gee.External.Capstone.Arm64 {
+namespace CSCapstone.Arm64 {
     /// <summary>
     ///     ARM64 Extender.
     /// </summary>

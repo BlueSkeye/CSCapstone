@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone.Arm64 {
+namespace CSCapstone.Arm64 {
     /// <summary>
     ///     Native ARM64 Instruction Detail.
     /// </summary>

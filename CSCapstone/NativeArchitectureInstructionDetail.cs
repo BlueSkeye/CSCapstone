@@ -1,15 +1,15 @@
-﻿using Gee.External.Capstone.Arm;
-using Gee.External.Capstone.Arm64;
-using Gee.External.Capstone.Mips;
-using Gee.External.Capstone.PowerPc;
-using Gee.External.Capstone.Sparc;
-using Gee.External.Capstone.SystemZ;
-using Gee.External.Capstone.X86;
-using Gee.External.Capstone.XCore;
+﻿using CSCapstone.Arm;
+using CSCapstone.Arm64;
+using CSCapstone.Mips;
+using CSCapstone.PowerPc;
+using CSCapstone.Sparc;
+using CSCapstone.SystemZ;
+using CSCapstone.X86;
+using CSCapstone.XCore;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Gee.External.Capstone {
+namespace CSCapstone {
     /// <summary>
     ///     Native Architecture Dependent Instruction Detail.
     /// </summary>

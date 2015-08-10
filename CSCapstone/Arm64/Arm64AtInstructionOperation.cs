@@ -1,4 +1,4 @@
-﻿namespace Gee.External.Capstone.Arm64 {
+﻿namespace CSCapstone.Arm64 {
     /// <summary>
     ///     ARM64 AT Instruction Operation.
     /// </summary>
