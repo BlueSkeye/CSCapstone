@@ -5,6 +5,12 @@ namespace CSCapstone
 {
     public class SafeCapstoneContextHandle : SafeCapstoneHandle
     {
+        public SafeCapstoneContextHandle()
+            : base(true)
+        {
+            return;
+        }
+
         protected SafeCapstoneContextHandle(IntPtr handle)
             : base(handle)
         {
@@ -20,36 +26,55 @@ namespace CSCapstone
         /// some kind of fix.</remarks>
         protected override bool ReleaseHandle()
         {
+            // We must use a local variable in order to be able to use the ref modifier
+            // on Close call.
             SafeCapstoneContextHandle mySelf = this;
-            return (CapstoneErrorCode.Ok == CapstoneImport.Close(ref mySelf));
+            if (IntPtr.Zero == mySelf.handle) { throw new InvalidOperationException(); }
+            CapstoneImport.Close(ref mySelf).ThrowOnCapstoneError();
+            // We need to reset the handle by ourselves.
+            this.handle = IntPtr.Zero;
+            return true;
         }
         
-        internal class Marshaler : ICustomMarshaler
+        internal class RefMarshaler : ICustomMarshaler
         {
+            /// <summary>Nothing to do really because the MarshalNativeToManaged
+            /// didn't allocated any data.</summary>
+            /// <param name="ManagedObj"></param>
             public void CleanUpManagedData(object ManagedObj)
             {
-                throw new NotImplementedException();
+                // Nothing to do here. The managed object is the one that has been
+                // marshaled in. However we want it to continue living.
+                return;
             }
 
             public void CleanUpNativeData(IntPtr pNativeData)
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("CleanUpNativeData");
+            }
+
+            public static ICustomMarshaler GetInstance(string cookie)
+            {
+                return _singleton;
             }
 
             public int GetNativeDataSize()
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("GetNativeDataSize");
             }
 
             public IntPtr MarshalManagedToNative(object ManagedObj)
             {
-                throw new NotImplementedException();
+                if (null == ManagedObj) { return IntPtr.Zero; }
+                return ((SafeCapstoneContextHandle)ManagedObj).handle;
             }
 
             public object MarshalNativeToManaged(IntPtr pNativeData)
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("MarshalNativeToManaged");
             }
+
+            private static readonly RefMarshaler _singleton = new RefMarshaler();
         }
     }
 }

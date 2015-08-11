@@ -1,13 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace CSCapstone.Arm64 {
-    /// <summary>
-    ///     ARM64 Register.
-    /// </summary>
-    public enum Arm64Register {
-        /// <summary>
-        ///     Invalid Register.
-        /// </summary>
+namespace CSCapstone.Arm64
+{
+    /// <summary>ARM64 Register.</summary>
+    public enum Arm64Register
+    {
+        /// <summary>Invalid Register.</summary>
         Invalid = 0,
 
         X29,

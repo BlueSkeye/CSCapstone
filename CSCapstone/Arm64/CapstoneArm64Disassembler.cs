@@ -1,15 +1,15 @@
-﻿namespace CSCapstone.Arm64 {
-    /// <summary>
-    ///     Capstone ARM64 Disassembler.
-    /// </summary>
-    internal sealed class CapstoneArm64Disassembler : CapstoneDisassembler<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> {
-        /// <summary>
-        ///     Create a Capstone ARM64 Disassembler.
-        /// </summary>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        internal CapstoneArm64Disassembler(DisassembleMode mode) : base(DisassembleArchitecture.Arm64, mode) {}
+﻿namespace CSCapstone.Arm64
+{
+    /// <summary>Capstone ARM64 Disassembler.</summary>
+    public sealed class CapstoneArm64Disassembler : CapstoneDisassembler<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>
+    {
+        /// <summary>Create a Capstone ARM64 Disassembler.</summary>
+        /// <param name="mode">The disassembler's mode.</param>
+        public CapstoneArm64Disassembler(DisassembleMode mode)
+            : base(DisassembleArchitecture.Arm64, mode)
+        {
+            return;
+        }
 
         /// <summary>
         ///     Create a Dissembled Instruction.

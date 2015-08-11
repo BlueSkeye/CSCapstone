@@ -1,15 +1,15 @@
-﻿namespace CSCapstone.Arm {
-    /// <summary>
-    ///     Capstone ARM Disassembler.
-    /// </summary>
-    internal sealed class CapstoneArmDisassembler : CapstoneDisassembler<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> {
-        /// <summary>
-        ///     Create a Capstone ARM Disassembler.
-        /// </summary>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        internal CapstoneArmDisassembler(DisassembleMode mode) : base(DisassembleArchitecture.Arm, mode) {}
+﻿namespace CSCapstone.Arm
+{
+    /// <summary>Capstone ARM Disassembler.</summary>
+    public sealed class CapstoneArmDisassembler : CapstoneDisassembler<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail>
+    {
+        /// <summary>Create a Capstone ARM Disassembler.</summary>
+        /// <param name="mode">The disassembler's mode.</param>
+        public CapstoneArmDisassembler(DisassembleMode mode)
+            : base(DisassembleArchitecture.Arm, mode)
+        {
+            return;
+        }
 
         /// <summary>
         ///     Create a Dissembled Instruction.

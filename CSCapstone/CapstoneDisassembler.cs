@@ -7,60 +7,24 @@ using CSCapstone.X86;
 namespace CSCapstone {
     /// <summary>This abstract class is intended to be the base class for the various
     /// disassemblers.</summary>
-    public abstract class CapstoneDisassembler : SafeCapstoneContextHandle, IDisposable
+    public abstract class CapstoneDisassembler<Inst, Reg, Group, Detail> 
+        : SafeCapstoneContextHandle, IDisposable
     {
-        /// <summary>
-        ///     Create a Disassembler.
-        /// </summary>
-        /// <param name="architecture">
-        ///     The disassembler's architecture.
-        /// </param>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
+        /// <summary>Create a Disassembler.</summary>
+        /// <param name="architecture">The disassembler's architecture.</param>
+        /// <param name="mode">The disassembler's mode.</param>
         protected CapstoneDisassembler(DisassembleArchitecture architecture, DisassembleMode mode)
             : base(CreateNativeAssembler(architecture, mode))
         {
-            this._architecture = architecture;
+            this.Architecture = architecture;
             this._mode = mode;
             this.EnableDetails = false;
             this.Syntax = DisassembleSyntaxOptionValue.Default;
             return;
         }
 
-        /// <summary>
-        ///     Disassembler's Architecture.
-        /// </summary>
-        private readonly DisassembleArchitecture _architecture;
-
-        /// <summary>
-        ///     Disassembler's Details Flag.
-        /// </summary>
-        private bool _detailsFlag;
-
-        /// <summary>
-        ///     Disposed Flag.
-        /// </summary>
-        private bool _disposed;
-
-        /// <summary>
-        ///     Disassembler's Mode.
-        /// </summary>
-        private DisassembleMode _mode;
-
-        /// <summary>
-        ///     Disassembler's Syntax.
-        /// </summary>
-        private DisassembleSyntaxOptionValue _syntax;
-
-        /// <summary>
-        ///     Get Disassembler's Architecture.
-        /// </summary>
-        public DisassembleArchitecture Architecture {
-            get {
-                return this._architecture;
-            }
-        }
+        /// <summary>Get Disassembler's Architecture.</summary>
+        public DisassembleArchitecture Architecture { get; private set; }
 
         /// <summary>
         ///     Enable or Disable Disassemble Details.
@@ -112,13 +76,6 @@ namespace CSCapstone {
             }
         }
 
-        /// <summary>Get Disassembler's Handle.</summary>
-        protected SafeCapstoneHandle Handle {
-            get {
-                return this;
-            }
-        }
-
         /// <summary>Invoke the native Capstone exported function that will open
         /// a disassembler for the given pair of architecture and mode.</summary>
         /// <param name="architecture">Target architecture</param>
@@ -134,59 +91,87 @@ namespace CSCapstone {
             return native;
         }
 
-        /// <summary>
-        ///     Create an ARM Disassembler.
-        /// </summary>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        /// <returns>
-        ///     A capstone disassembler.
-        /// </returns>
-        public static CapstoneDisassembler<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> CreateArmDisassembler(DisassembleMode mode) {
-            var @object = new CapstoneArmDisassembler(mode);
-            return @object;
+        /// <summary>Create an ARM Disassembler.</summary>
+        /// <param name="mode">The disassembler's mode.</param>
+        /// <returns>A capstone disassembler.</returns>
+        public static CapstoneArmDisassembler CreateArmDisassembler(DisassembleMode mode)
+        {
+            return new CapstoneArmDisassembler(mode);
         }
 
-        /// <summary>
-        ///     Create a ARM64 Disassembler.
-        /// </summary>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        /// <returns>
-        ///     A capstone disassembler.
-        /// </returns>
-        public static CapstoneDisassembler<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> CreateArm64Disassembler(DisassembleMode mode) {
-            var @object = new CapstoneArm64Disassembler(mode);
-            return @object;
+        /// <summary>Create a ARM64 Disassembler.</summary>
+        /// <param name="mode">The disassembler's mode.</param>
+        /// <returns>A capstone disassembler.</returns>
+        public static CapstoneArm64Disassembler CreateArm64Disassembler(DisassembleMode mode)
+        {
+            return new CapstoneArm64Disassembler(mode);
         }
 
-        /// <summary>
-        ///     Create an X86 Disassembler.
-        /// </summary>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        /// <returns>
-        ///     A capstone disassembler.
-        /// </returns>
-        public static CapstoneDisassembler<X86Instruction, X86Register, X86InstructionGroup, X86InstructionDetail> CreateX86Disassembler(DisassembleMode mode) {
-            var @object = new CapstoneX86Disassembler(mode);
-            return @object;
+        /// <summary>Create a Dissembled Instruction.</summary>
+        /// <param name="nativeInstruction">A native instruction.</param>
+        /// <returns>A dissembled instruction.</returns>
+        protected abstract Instruction<Inst, Reg, Group, Detail> CreateInstruction(NativeInstruction nativeInstruction);
+
+        /// <summary>Create an X86 Disassembler.</summary>
+        /// <param name="mode">The disassembler's mode.</param>
+        /// <returns>A capstone disassembler.</returns>
+        public static CapstoneX86Disassembler CreateX86Disassembler(DisassembleMode mode)
+        {
+            return new CapstoneX86Disassembler(mode);
         }
 
-        /// <summary>
-        ///     Dispose Disassembler.
-        /// </summary>
+        /// <summary>Disassemble Binary Code.</summary>
+        /// <param name="code">A collection of bytes representing the binary code
+        /// to disassemble. Should not be a null reference.</param>
+        /// <param name="count">The number of instructions to disassemble. A 0
+        /// indicates all instructions should be disassembled.</param>
+        /// <param name="startingAddress">The address of the first instruction in
+        /// the collection of bytes to disassemble.</param>
+        /// <returns>A collection of dissembled instructions.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown if the binary
+        /// code could not be disassembled.</exception>
+        public Instruction<Inst, Reg, Group, Detail>[] Disassemble(
+            byte[] code, int count = 0, long startingAddress = 0x1000)
+        {
+            return NativeCapstone.Disassemble(this, code, count, startingAddress)
+                .Instructions
+                .Select(this.CreateInstruction)
+                .ToArray();
+        }
+
+        /// <summary>Disassemble Binary Code.</summary>
+        /// <param name="code">A collection of bytes representing the binary code to
+        /// disassemble. Should not be a null reference.</param>
+        /// <param name="startingAddress">The address of the first instruction in
+        /// the collection of bytes to disassemble.</param>
+        /// <returns>A collection of dissembled instructions.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown if the binary
+        /// code could not be disassembled.</exception>
+        public Instruction<Inst, Reg, Group, Detail>[] DisassembleAll(
+            byte[] code, long startingAddress)
+        {
+            return this.Disassemble(code, 0, startingAddress);
+        }
+
+        /// <summary>Disassemble Binary Code.</summary>
+        /// <param name="code">A collection of bytes representing the binary code
+        /// to disassemble. Should not be a null reference.</param>
+        /// <returns>A collection of dissembled instructions.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown if the binary
+        /// code could not be disassembled.</exception>
+        [Obsolete("Use Disassemble instead.")]
+        public Instruction<Inst, Reg, Group, Detail>[] DisassembleAll(byte[] code)
+        {
+            return Disassemble(code);
+        }
+
+        /// <summary>Dispose Disassembler.</summary>
         public void Dispose() {
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        ///     Dispose Disassembler.
-        /// </summary>
+        /// <summary>Dispose Disassembler.</summary>
         /// <param name="disposing">
         ///     A boolean true if the disassembler is being disposed from application code. A boolean false otherwise.
         /// </param>
@@ -234,117 +219,15 @@ namespace CSCapstone {
             CapstoneImport.SetOption(this, DisassembleOptionType.Syntax, (IntPtr)value)
                 .ThrowOnCapstoneError();
         }
-    }
 
-    /// <summary>
-    ///     Capstone Disassembler.
-    /// </summary>
-    public abstract class CapstoneDisassembler<TArchitectureInstruction, TArchitectureRegister, TArchitectureGroup, TArchitectureDetail> : CapstoneDisassembler {
-        /// <summary>
-        ///     Create a Disassembler.
-        /// </summary>
-        /// <param name="architecture">
-        ///     The disassembler's architecture.
-        /// </param>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        protected CapstoneDisassembler(DisassembleArchitecture architecture, DisassembleMode mode) : base(architecture, mode) {}
-
-        /// <summary>
-        ///     Disassemble Binary Code.
-        /// </summary>
-        /// <param name="code">
-        ///     A collection of bytes representing the binary code to disassemble. Should not be a null reference.
-        /// </param>
-        /// <param name="count">
-        ///     The number of instructions to disassemble. A 0 indicates all instructions should be disassembled.
-        /// </param>
-        /// <param name="startingAddress">
-        ///     The address of the first instruction in the collection of bytes to disassemble.
-        /// </param>
-        /// <returns>
-        ///     A collection of dissembled instructions.
-        /// </returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if the binary code could not be disassembled.
-        /// </exception>
-        public Instruction<TArchitectureInstruction, TArchitectureRegister, TArchitectureGroup, TArchitectureDetail>[] Disassemble(byte[] code, int count, long startingAddress) {
-            var nativeInstructions = NativeCapstone.Disassemble(this.Handle, code, count, startingAddress);
-            var instructions = nativeInstructions
-                .Instructions
-                .Select(this.CreateInstruction)
-                .ToArray();
-
-            return instructions;
-        }
-
-        /// <summary>
-        ///     Disassemble Binary Code.
-        /// </summary>
-        /// <param name="code">
-        ///     A collection of bytes representing the binary code to disassemble. Should not be a null reference.
-        /// </param>
-        /// <param name="count">
-        ///     The number of instructions to disassemble. A 0 indicates all instructions should be disassembled.
-        /// </param>
-        /// <returns>
-        ///     A collection of dissembled instructions.
-        /// </returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if the binary code could not be disassembled.
-        /// </exception>
-        public Instruction<TArchitectureInstruction, TArchitectureRegister, TArchitectureGroup, TArchitectureDetail>[] Disassemble(byte[] code, int count) {
-            var instructions = this.Disassemble(code, count, 0x1000);
-            return instructions;
-        }
-
-        /// <summary>
-        ///     Disassemble Binary Code.
-        /// </summary>
-        /// <param name="code">
-        ///     A collection of bytes representing the binary code to disassemble. Should not be a null reference.
-        /// </param>
-        /// <param name="startingAddress">
-        ///     The address of the first instruction in the collection of bytes to disassemble.
-        /// </param>
-        /// <returns>
-        ///     A collection of dissembled instructions.
-        /// </returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if the binary code could not be disassembled.
-        /// </exception>
-        public Instruction<TArchitectureInstruction, TArchitectureRegister, TArchitectureGroup, TArchitectureDetail>[] DisassembleAll(byte[] code, long startingAddress) {
-            var instructions = this.Disassemble(code, 0, startingAddress);
-            return instructions;
-        }
-
-        /// <summary>
-        ///     Disassemble Binary Code.
-        /// </summary>
-        /// <param name="code">
-        ///     A collection of bytes representing the binary code to disassemble. Should not be a null reference.
-        /// </param>
-        /// <returns>
-        ///     A collection of dissembled instructions.
-        /// </returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if the binary code could not be disassembled.
-        /// </exception>
-        public Instruction<TArchitectureInstruction, TArchitectureRegister, TArchitectureGroup, TArchitectureDetail>[] DisassembleAll(byte[] code) {
-            var instructions = this.DisassembleAll(code, 0x1000);
-            return instructions;
-        }
-
-        /// <summary>
-        ///     Create a Dissembled Instruction.
-        /// </summary>
-        /// <param name="nativeInstruction">
-        ///     A native instruction.
-        /// </param>
-        /// <returns>
-        ///     A dissembled instruction.
-        /// </returns>
-        protected abstract Instruction<TArchitectureInstruction, TArchitectureRegister, TArchitectureGroup, TArchitectureDetail> CreateInstruction(NativeInstruction nativeInstruction);
+        private const long DefaultStatsAddress = 0x1000;
+        /// <summary>Disassembler's Details Flag.</summary>
+        private bool _detailsFlag;
+        /// <summary>Disposed Flag.</summary>
+        private bool _disposed;
+        /// <summary>Disassembler's Mode.</summary>
+        private DisassembleMode _mode;
+        /// <summary>Disassembler's Syntax.</summary>
+        private DisassembleSyntaxOptionValue _syntax;
     }
 }

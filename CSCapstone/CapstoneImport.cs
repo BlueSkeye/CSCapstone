@@ -5,19 +5,20 @@ namespace CSCapstone {
     /// <summary>
     ///     Capstone Import.
     /// </summary>
-    public static class CapstoneImport {
-        /// <summary>
-        ///     Close a Capstone Handle.
-        /// </summary>
-        /// <param name="pHandle">
-        ///     A pointer to a Capstone handle.
-        /// </param>
-        /// <returns>
-        ///     An integer indicating the result of the operation.
-        /// </returns>
+    public static class CapstoneImport
+    {
+        /// <summary>Close a Capstone Handle.</summary>
+        /// <param name="pHandle">A pointer to a Capstone handle.</param>
+        /// <returns>An integer indicating the result of the operation.</returns>
+        /// <remarks>We MUST implement our own marshaler otherwise the standard 
+        /// marshaler will attempt some tricks to preserve reference counting the
+        /// safe handle. Those tricks would interfere with the internal state of
+        /// the safe handle and would trigger an "Handle already closed exception."
+        /// Additionally, the ref modifier is required because the native function
+        /// expects a pointer to the handle and not the handle itself.</remarks>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_close")]
         internal static extern CapstoneErrorCode Close(
-            [In, Out, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeCapstoneContextHandle.Marshaler))] ref SafeCapstoneContextHandle pHandle);
+            [In, Out, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeCapstoneContextHandle.RefMarshaler))] ref SafeCapstoneContextHandle pHandle);
 
         /// <summary>
         ///     Disassemble Binary Code.

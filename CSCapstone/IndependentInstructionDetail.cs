@@ -1,26 +1,20 @@
-﻿namespace CSCapstone {
-    /// <summary>
-    ///     Architecture Independent Instruction Detail.
-    /// </summary>
-    public sealed class IndependentInstructionDetail<TArchitectureRegister, TArchitectureGroup> {
-        /// <summary>
-        ///     Get Implicit Registers Read by an Instruction.
-        /// </summary>
-        public TArchitectureRegister[] ReadRegisters { get; internal set; }
+﻿namespace CSCapstone
+{
+    /// <summary>Architecture Independent Instruction Detail.</summary>
+    public sealed class IndependentInstructionDetail<ArchReg, ArchGroup> {
+        /// <summary>Get Implicit Registers Read by an Instruction.</summary>
+        public ArchReg[] ReadRegisters { get; internal set; }
 
-        /// <summary>
-        ///     Get Implicit Registers Written by an Instruction.
-        /// </summary>
-        public TArchitectureRegister[] WrittenRegisters { get; internal set; }
+        /// <summary>Get Implicit Registers Written by an Instruction.</summary>
+        public ArchReg[] WrittenRegisters { get; internal set; }
 
-        /// <summary>
-        ///     Get Groups an Instruction Belongs to.
-        /// </summary>
-        public TArchitectureGroup[] Groups { get; internal set; }
+        /// <summary>Get Groups an Instruction Belongs to.</summary>
+        public ArchGroup[] Groups { get; internal set; }
 
-        /// <summary>
-        ///     Create an X86 Independent Architecture Instruction Detail.
-        /// </summary>
-        internal IndependentInstructionDetail() {}
+        /// <summary>Create an X86 Independent Architecture Instruction Detail.</summary>
+        internal IndependentInstructionDetail()
+        {
+            return;
+        }
     }
 }

@@ -9,7 +9,14 @@ namespace CSCapstone {
     /// Currently there is two linds of handles : <see cref="SafeCapstoneContextHandle"/>
     /// and <see cref="SafeCapstoneInstructionHandle"/>
     /// </summary>
-    public abstract class SafeCapstoneHandle : SafeHandle {
+    public abstract class SafeCapstoneHandle : SafeHandle
+    {
+        protected SafeCapstoneHandle(bool ownsHandle)
+            : base(IntPtr.Zero, ownsHandle)
+        {
+            return;
+        }
+
         /// <summary>Capstone library returns a NULL value for invalid pointers.
         /// </summary>
         /// <param name="handle">The native handle to be wrapped by this class.</param>
