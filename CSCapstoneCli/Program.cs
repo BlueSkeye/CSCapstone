@@ -59,7 +59,7 @@ namespace CSCapstoneCli {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = CapstoneDisassembler.CreateArmDisassembler(mode)) {
+            using (var disassembler = new CapstoneArmDisassembler(mode)) {
                 // Enable Disassemble Details.
                 //
                 // Enables disassemble details, which are disabled by default, to provide more detailed information on
@@ -179,7 +179,7 @@ namespace CSCapstoneCli {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = CapstoneDisassembler.CreateArm64Disassembler(DisassembleMode.Arm32)) {
+            using (var disassembler = new CapstoneArm64Disassembler(DisassembleMode.Arm32)) {
                 // Enable Disassemble Details.
                 //
                 // Enables disassemble details, which are disabled by default, to provide more detailed information on
@@ -312,7 +312,7 @@ namespace CSCapstoneCli {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = CapstoneDisassembler.CreateX86Disassembler(DisassembleMode.Bit32)) {
+            using (var disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32)) {
                 // Enable Disassemble Details.
                 //
                 // Enables disassemble details, which are disabled by default, to provide more detailed information on

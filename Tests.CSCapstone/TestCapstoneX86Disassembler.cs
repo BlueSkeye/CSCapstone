@@ -1,4 +1,5 @@
 ﻿using CSCapstone;
+using CSCapstone.X86;
 using NUnit.Framework;
 
 namespace Tests.CSCapstone {
@@ -7,17 +8,24 @@ namespace Tests.CSCapstone {
     /// </summary>
     [TestFixture]
     public sealed class TestCapstoneX86Disassembler {
-        /// <summary>
-        ///     Test Create.
-        /// </summary>
+        /// <summary>Test Create.</summary>
         [Test]
         public void TestCreate() {
-            var disassembler = CapstoneDisassembler.CreateX86Disassembler(DisassembleMode.Bit32);
-            Assert.IsNotNull(disassembler);
-            Assert.AreEqual(disassembler.Architecture, DisassembleArchitecture.X86);
-            Assert.AreEqual(disassembler.EnableDetails, false);
-            Assert.AreEqual(disassembler.Mode, DisassembleMode.Bit32);
-            Assert.AreEqual(disassembler.Syntax, DisassembleSyntaxOptionValue.Default);
+            try {
+                using (var disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32)) {
+                    Assert.IsNotNull(disassembler);
+                    Assert.AreEqual(disassembler.Architecture, DisassembleArchitecture.X86);
+                    Assert.AreEqual(disassembler.EnableDetails, false);
+                    Assert.AreEqual(disassembler.Mode, DisassembleMode.Bit32);
+                    Assert.AreEqual(disassembler.Syntax, DisassembleSyntaxOptionValue.Default);
+                }
+            }
+            catch (System.Exception e) {
+                for (System.Exception ex = e; null != ex; ex = ex.InnerException) {
+                    System.Console.Write(ex.StackTrace);
+                }
+                throw;
+            }
         }
 
         /// <summary>
@@ -29,7 +37,8 @@ namespace Tests.CSCapstone {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = CapstoneDisassembler.CreateX86Disassembler(DisassembleMode.Bit32)) {
+            using (var disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32))
+            {
                 Assert.IsNotNull(disassembler);
 
                 // Enable Disassemble Details.

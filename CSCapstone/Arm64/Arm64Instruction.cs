@@ -1,13 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace CSCapstone.Arm64 {
-    /// <summary>
-    ///     ARM64 Instruction.
-    /// </summary>
-    public enum Arm64Instruction {
-        /// <summary>
-        ///     Invalid Instruction.
-        /// </summary>
+namespace CSCapstone.Arm64
+{
+    /// <summary>ARM64 Instruction.</summary>
+    public enum Arm64Instruction
+    {
+        /// <summary>Invalid Instruction.</summary>
         Invalid = 0,
 
         ABS,

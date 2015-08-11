@@ -1,32 +1,35 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace CSCapstone {
-    /// <summary>
-    ///     Safe Capstone Handle.
+    /// <summary>Safe handles us the recommended way for memory leaks avoidance when
+    /// programming against the .Net framework when invoking native functions. This
+    /// abstract base class will be the parent of every Capstone related object that
+    /// is transiting between the Capstone native library and the C# wrapper library.
+    /// Currently there is two linds of handles : <see cref="SafeCapstoneContextHandle"/>
+    /// and <see cref="SafeCapstoneInstructionHandle"/>
     /// </summary>
-    public sealed class SafeCapstoneHandle : SafeHandleZeroOrMinusOneIsInvalid {
-        /// <summary>
-        ///     Create a Safe Capstone Handle.
-        /// </summary>
-        /// <param name="handle">
-        ///     A pointer to a handle representing a capstone engine. Should not be a null reference.
-        /// </param>
-        public SafeCapstoneHandle(IntPtr handle) : base(true) {
-            this.handle = handle;
+    public abstract class SafeCapstoneHandle : SafeHandle
+    {
+        protected SafeCapstoneHandle(bool ownsHandle)
+            : base(IntPtr.Zero, ownsHandle)
+        {
+            return;
         }
 
-        /// <summary>
-        ///     Release Handle.
+        /// <summary>Capstone library returns a NULL value for invalid pointers.
         /// </summary>
-        /// <returns>
-        ///     A boolean true if the handle was released. A boolean false otherwise.
-        /// </returns>
-        protected override bool ReleaseHandle() {
-            var resultCode = CapstoneImport.Close(ref this.handle);
-            var isReleased = resultCode == (int) DisassembleErrorCode.Ok;
+        /// <param name="handle">The native handle to be wrapped by this class.</param>
+        public SafeCapstoneHandle(IntPtr handle)
+            : base(IntPtr.Zero, true)
+        {
+            base.handle = handle;
+            return;
+        }
 
-            return isReleased;
+        public override bool IsInvalid
+        {
+            get { return IntPtr.Zero == base.handle; }
         }
     }
 }
