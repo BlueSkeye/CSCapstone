@@ -111,12 +111,12 @@
     <Compile Include="CapstoneImport.cs" />
     <Compile Include="CapstoneProxyImport.cs" />
     <Compile Include="DisassembleArchitecture.cs" />
-    <Compile Include="DisassembleErrorCode.cs" />
+    <Compile Include="CapstoneErrorCode.cs" />
     <Compile Include="DisassembleMode.cs" />
     <Compile Include="DisassembleOptionType.cs" />
     <Compile Include="DisassembleOptionValue.cs" />
     <Compile Include="DisassembleSyntaxOptionValue.cs" />
-    <Compile Include="ExceptionThrower.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="IndependentInstructionGroup.cs" />
     <Compile Include="Instruction.cs" />
     <Compile Include="MarshalExtension.cs" />
@@ -147,6 +147,7 @@
     <Compile Include="PowerPc\NativePowerPcInstructionMemoryOperandValue.cs" />
     <Compile Include="PowerPc\NativePowerPcInstructionOperand.cs" />
     <Compile Include="PowerPc\NativePowerPcInstructionOperandValue.cs" />
+    <Compile Include="SafeCapstoneContextHandle.cs" />
     <Compile Include="Sparc\NativeSparcInstructionDetail.cs" />
     <Compile Include="Sparc\NativeSparcInstructionMemoryOperandValue.cs" />
     <Compile Include="Sparc\NativeSparcInstructionOperand.cs" />

@@ -5,10 +5,29 @@ using System.Linq;
 using CSCapstone.X86;
 
 namespace CSCapstone {
-    /// <summary>
-    ///     Capstone Disassembler.
-    /// </summary>
-    public abstract class CapstoneDisassembler : IDisposable {
+    /// <summary>This abstract class is intended to be the base class for the various
+    /// disassemblers.</summary>
+    public abstract class CapstoneDisassembler : SafeCapstoneContextHandle, IDisposable
+    {
+        /// <summary>
+        ///     Create a Disassembler.
+        /// </summary>
+        /// <param name="architecture">
+        ///     The disassembler's architecture.
+        /// </param>
+        /// <param name="mode">
+        ///     The disassembler's mode.
+        /// </param>
+        protected CapstoneDisassembler(DisassembleArchitecture architecture, DisassembleMode mode)
+            : base(CreateNativeAssembler(architecture, mode))
+        {
+            this._architecture = architecture;
+            this._mode = mode;
+            this.EnableDetails = false;
+            this.Syntax = DisassembleSyntaxOptionValue.Default;
+            return;
+        }
+
         /// <summary>
         ///     Disassembler's Architecture.
         /// </summary>
@@ -23,11 +42,6 @@ namespace CSCapstone {
         ///     Disposed Flag.
         /// </summary>
         private bool _disposed;
-
-        /// <summary>
-        ///     Disassembler's Handle.
-        /// </summary>
-        private readonly SafeCapstoneHandle _handle;
 
         /// <summary>
         ///     Disassembler's Mode.
@@ -59,50 +73,65 @@ namespace CSCapstone {
                 return this._detailsFlag;
             }
             set {
+                CapstoneImport.SetOption(this, DisassembleOptionType.Detail,
+                    value
+                        ? (IntPtr)DisassembleOptionValue.On
+                        : (IntPtr)DisassembleOptionValue.Off
+                    )
+                    .ThrowOnCapstoneError();
                 this._detailsFlag = value;
-                NativeCapstone.SetDisassembleDetails(this._handle, this._detailsFlag);
             }
         }
 
-        /// <summary>
-        ///     Get and Set Disassembler's Mode.
-        /// </summary>
+        /// <summary>Get and Set Disassembler's Mode.</summary>
         /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if the disassembler's mode could not be set.
+        /// Thrown if the disassembler's mode could not be set.
         /// </exception>
         public DisassembleMode Mode {
             get {
                 return this._mode;
             }
             set {
+                CapstoneImport.SetOption(this, DisassembleOptionType.Mode, (IntPtr)value)
+                    .ThrowOnCapstoneError();
                 this._mode = value;
-                NativeCapstone.SetDisassembleModeOption(this._handle, this._mode);
             }
         }
 
-        /// <summary>
-        ///     Get and Set Disassembler's Syntax.
-        /// </summary>
+        /// <summary>Get and Set Disassembler's Syntax.</summary>
         /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if the disassembler's syntax could not be set.
+        /// Thrown if the disassembler's syntax could not be set.
         /// </exception>
         public DisassembleSyntaxOptionValue Syntax {
             get {
                 return this._syntax;
             }
             set {
+                this.SetDisassembleSyntaxOption(value);
                 this._syntax = value;
-                NativeCapstone.SetDisassembleSyntaxOption(this._handle, this._syntax);
             }
         }
 
-        /// <summary>
-        ///     Get Disassembler's Handle.
-        /// </summary>
+        /// <summary>Get Disassembler's Handle.</summary>
         protected SafeCapstoneHandle Handle {
             get {
-                return this._handle;
+                return this;
             }
+        }
+
+        /// <summary>Invoke the native Capstone exported function that will open
+        /// a disassembler for the given pair of architecture and mode.</summary>
+        /// <param name="architecture">Target architecture</param>
+        /// <param name="mode">Target mode</param>
+        /// <returns>The native handle that is to be wrapped by our super class
+        /// safe handle.</returns>
+        /// <remarks>This method is for use by the constructor exclusively.</remarks>
+        private static IntPtr CreateNativeAssembler(DisassembleArchitecture architecture,
+            DisassembleMode mode)
+        {
+            IntPtr native;
+            CapstoneImport.Open(architecture, mode, out native).ThrowOnCapstoneError();
+            return native;
         }
 
         /// <summary>
@@ -148,24 +177,6 @@ namespace CSCapstone {
         }
 
         /// <summary>
-        ///     Create a Disassembler.
-        /// </summary>
-        /// <param name="architecture">
-        ///     The disassembler's architecture.
-        /// </param>
-        /// <param name="mode">
-        ///     The disassembler's mode.
-        /// </param>
-        protected CapstoneDisassembler(DisassembleArchitecture architecture, DisassembleMode mode) {
-            this._architecture = architecture;
-            this._mode = mode;
-
-            this._handle = NativeCapstone.Create(this._architecture, this._mode);
-            this.EnableDetails = false;
-            this.Syntax = DisassembleSyntaxOptionValue.Default;
-        }
-
-        /// <summary>
         ///     Dispose Disassembler.
         /// </summary>
         public void Dispose() {
@@ -180,11 +191,48 @@ namespace CSCapstone {
         ///     A boolean true if the disassembler is being disposed from application code. A boolean false otherwise.
         /// </param>
         protected virtual void Dispose(bool disposing) {
+            base.Dispose(disposing);
             if (!this._disposed) {
-                this._handle.Close();
+                this._disposed = true;
             }
+        }
 
-            this._disposed = true;
+        /// <summary>Enable ATT Disassemble Syntax Option.</summary>
+        /// <exception cref="System.InvalidOperationException">
+        ///     Thrown if the disassemble syntax option could not be set.
+        /// </exception>
+        public void EnableAttDisassembleSyntaxOption()
+        {
+            this.SetDisassembleSyntaxOption(DisassembleSyntaxOptionValue.Att);
+        }
+
+        /// <summary>Enable Default Disassemble Syntax Option.</summary>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if the disassemble syntax option could not be set.
+        /// </exception>
+        public void EnableDefaultDisassembleSyntaxOption()
+        {
+            this.SetDisassembleSyntaxOption(DisassembleSyntaxOptionValue.Default);
+        }
+
+        /// <summary>Enable Intel Disassemble Syntax Option.</summary>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if the disassemble syntax option could not be set.
+        /// </exception>
+        public void EnableIntelDisassembleSyntaxOption()
+        {
+            this.SetDisassembleSyntaxOption(DisassembleSyntaxOptionValue.Intel);
+        }
+
+        /// <summary>Set Disassemble Syntax Option.</summary>
+        /// <param name="value">A syntax option value.</param>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if the disassemble syntax option could not be set.
+        /// </exception>
+        private void SetDisassembleSyntaxOption(DisassembleSyntaxOptionValue value)
+        {
+            CapstoneImport.SetOption(this, DisassembleOptionType.Syntax, (IntPtr)value)
+                .ThrowOnCapstoneError();
         }
     }
 
