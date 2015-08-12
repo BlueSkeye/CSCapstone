@@ -47,12 +47,18 @@ namespace CSCapstone {
         ///     <c>IntPtr.Zero</c> indicates no instructions were disassembled as a result of an error.
         /// </returns>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_disasm")]
-        public static extern IntPtr Disassemble(IntPtr pHandle, IntPtr pCode, IntPtr codeSize, ulong startingAddress, IntPtr count, ref IntPtr instruction);
+        public static extern IntPtr Disassemble(
+            [In] SafeCapstoneContextHandle pHandle,
+            [In] byte[] pCode,
+            [In] IntPtr codeSize,
+            [In] ulong startingAddress,
+            [In] IntPtr count,
+            [Out] out IntPtr instruction);
 
         /// <summary>
         ///     Free Memory Allocated For Disassembled Instructions.
         /// </summary>
-        /// <param name="pInstructions">
+        /// <param name="instructions">
         ///     A pointer to a collection of disassembled instructions.
         /// </param>
         /// <param name="instructionCount">
@@ -60,6 +66,14 @@ namespace CSCapstone {
         /// </param>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_free")]
         public static extern void Free(IntPtr pInstructions, IntPtr instructionCount);
+
+        /// <summary>Report the last error number when some API function fail.
+        /// Like glibc's errno, cs_errno might not retain its old value once accessed.</summary>
+        /// <param name="pHandle"></param>
+        /// <returns></returns>
+        [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_errno")]
+        public static extern CapstoneErrorCode GetLastError(
+            [In] SafeCapstoneContextHandle pHandle);
 
         /// <summary>
         ///     Resolve an Instruction Unique Identifier to an Instruction Name.
