@@ -55,17 +55,15 @@ namespace CSCapstone {
             [In] IntPtr count,
             [Out] out IntPtr instruction);
 
-        /// <summary>
-        ///     Free Memory Allocated For Disassembled Instructions.
-        /// </summary>
-        /// <param name="instructions">
-        ///     A pointer to a collection of disassembled instructions.
-        /// </param>
-        /// <param name="instructionCount">
-        ///     A platform specific integer representing the number of disassembled instructions.
-        /// </param>
+        /// <summary>Free Memory Allocated For Disassembled Instructions.</summary>
+        /// <param name="instructions">A pointer to a collection of disassembled
+        /// instructions.</param>
+        /// <param name="instructionCount">A platform specific integer representing
+        /// the number of disassembled instructions.</param>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_free")]
-        public static extern void Free(IntPtr pInstructions, IntPtr instructionCount);
+        public static extern void Free(
+            [In] IntPtr pInstructions,
+            [In] IntPtr instructionCount);
 
         /// <summary>Report the last error number when some API function fail.
         /// Like glibc's errno, cs_errno might not retain its old value once accessed.</summary>
@@ -75,21 +73,26 @@ namespace CSCapstone {
         public static extern CapstoneErrorCode GetLastError(
             [In] SafeCapstoneContextHandle pHandle);
 
-        /// <summary>
-        ///     Resolve an Instruction Unique Identifier to an Instruction Name.
+        /// <summary>Return friendly name of a group id (that an instruction can
+        /// belong to) Find the group id from header file of corresponding
+        /// architecture (arm.h for ARM, x86.h for X86, ...)
+        /// WARN: when in 'diet' mode, this API is irrelevant because the engine does
+        /// not store group name.</summary>
+        /// <param name="pHandle">handle returned by cs_open()</param>
+        /// <param name="groupId">group id</param>
+        /// <returns>string name of the group, or NULL if @group_id is invalid.</returns>
+        [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_group_name", CharSet = CharSet.Ansi)]
+        public static extern string GroupName(IntPtr pHandle, uint groupId);
+
+        /// <summary>Resolve an Instruction Unique Identifier to an Instruction Name.
         /// </summary>
-        /// <param name="pHandle">
-        ///     A pointer to a Capstone handle.
-        /// </param>
-        /// <param name="id">
-        ///     An instruction's unique identifier.
-        /// </param>
-        /// <returns>
-        ///     A pointer to a string representing the instruction's name. An <c>IntPtr.Zero</c> indicates the
-        ///     instruction's unique identifier is invalid.
-        /// </returns>
-        [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_insn_name")]
-        public static extern IntPtr InstructionName(IntPtr pHandle, uint id);
+        /// <param name="pHandle">A pointer to a Capstone handle.</param>
+        /// <param name="id">An instruction's unique identifier.</param>
+        /// <returns>A pointer to a string representing the instruction's name. An
+        /// <c>IntPtr.Zero</c> indicates the instruction's unique identifier is
+        /// invalid.</returns>
+        [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_insn_name", CharSet=CharSet.Ansi)]
+        public static extern string InstructionName(IntPtr pHandle, uint id);
 
         /// <summary>Create a Capstone native handle that stands for a disassembler
         /// for the given architecture and mode pair.</summary>
