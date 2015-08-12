@@ -1,7 +1,9 @@
-﻿using CSCapstone.Arm;
-using CSCapstone.Arm64;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
+using CSCapstone.Arm;
+using CSCapstone.Arm64;
 using CSCapstone.X86;
 
 namespace CSCapstone {
@@ -96,14 +98,6 @@ namespace CSCapstone {
         /// <returns>A dissembled instruction.</returns>
         protected abstract Instruction<Inst, Reg, Group, Detail> CreateInstruction(NativeInstruction nativeInstruction);
 
-        /// <summary>Create an X86 Disassembler.</summary>
-        /// <param name="mode">The disassembler's mode.</param>
-        /// <returns>A capstone disassembler.</returns>
-        public static CapstoneX86Disassembler CreateX86Disassembler(DisassembleMode mode)
-        {
-            return new CapstoneX86Disassembler(mode);
-        }
-
         /// <summary>Disassemble Binary Code.</summary>
         /// <param name="code">A collection of bytes representing the binary code
         /// to disassemble. Should not be a null reference.</param>
@@ -123,13 +117,7 @@ namespace CSCapstone {
             if (IntPtr.Zero == instructionsCount) {
                 CapstoneImport.GetLastError(this).ThrowOnCapstoneError();
             }
-            NativeInstruction[] instructions = 
-                MarshalExtension.PtrToStructure<NativeInstruction>(nativeInstructions, (int)instructionsCount);
-            SafeNativeInstructionHandle localHandle = 
-                new SafeNativeInstructionHandle(instructions, nativeInstructions, instructionsCount);
-
-            // return localHandle
-            return instructions
+            return EnumerateNativeInstructions(nativeInstructions, (int)instructionsCount)
                 .Select(this.CreateInstruction)
                 .ToArray();
         }
@@ -184,6 +172,23 @@ namespace CSCapstone {
         public void EnableIntelDisassembleSyntaxOption()
         {
             this.SetDisassembleSyntaxOption(DisassembleSyntaxOptionValue.Intel);
+        }
+
+        /// <summary>Provides an enumerator that will enumerate <see cref="NativeInstruction"/>
+        /// instances marshaled back from a call to cs_disasm.</summary>
+        /// <param name="pNativeArray">A pointer to the native collection. The pointer
+        /// should be initialized to the collection's starting address.</param>
+        /// <param name="size">The collection's size.</param>
+        /// <returns>An enumerable object.</returns>
+        /// <remarks>CAUTION : Make sure not to release native memory until you are
+        /// done with the enumerator.</remarks>
+        private static IEnumerable<NativeInstruction> EnumerateNativeInstructions(IntPtr pNativeArray, int size)
+        {
+            for (int index = 0; index < size; index++) {
+                yield return NativeInstruction.Create(pNativeArray);
+                pNativeArray += Marshal.SizeOf(typeof(NativeInstruction));
+            }
+            yield break;
         }
 
         /// <summary>Set Disassemble Syntax Option.</summary>

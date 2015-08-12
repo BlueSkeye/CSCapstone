@@ -20,32 +20,24 @@ namespace CSCapstone {
         internal static extern CapstoneErrorCode Close(
             [In, Out, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeCapstoneContextHandle.RefMarshaler))] ref SafeCapstoneContextHandle pHandle);
 
-        /// <summary>
-        ///     Disassemble Binary Code.
-        /// </summary>
-        /// <param name="pHandle">
-        ///     A pointer to a Capstone handle.
+        /// <summary>Disassemble Binary Code.</summary>
+        /// <param name="pHandle">A <see cref="SafeCapstoneContextHandle"/> as retrieved
+        /// by a call to <see cref="Open"/>.</param>
+        /// <param name="pCode">An array of bytes holding the code to be disassembled.</param>
+        /// <param name="codeSize">A platform specific integer representing the number
+        /// of instructions to disassemble.
+        /// TODO : Instructions or buytes ?</param>
+        /// <param name="startingAddress">The address of the first instruction in
+        /// the collection of bytes to disassemble.</param>
+        /// <param name="count">A platform specific integer representing the number of
+        /// instructions to disassemble. A <c>IntPtr.Zero</c> indicates all instructions
+        /// should be disassembled.</param>
+        /// <param name="instruction">On return this parameter will be updated with a
+        /// pointer at an array of A pointer to a collection of disassembled instructions.
         /// </param>
-        /// <param name="pCode">
-        ///     A pointer to a collection of bytes representing the binary code to disassemble.
-        /// </param>
-        /// <param name="codeSize">
-        ///     A platform specific integer representing the number of instructions to disassemble.
-        /// </param>
-        /// <param name="startingAddress">
-        ///     The address of the first instruction in the collection of bytes to disassemble.
-        /// </param>
-        /// <param name="count">
-        ///     A platform specific integer representing the number of instructions to disassemble. A
-        ///     <c>IntPtr.Zero</c> indicates all instructions should be disassembled.
-        /// </param>
-        /// <param name="instruction">
-        ///     A pointer to a collection of disassembled instructions.
-        /// </param>
-        /// <returns>
-        ///     A platform specific integer representing the number of instructions disassembled. An
-        ///     <c>IntPtr.Zero</c> indicates no instructions were disassembled as a result of an error.
-        /// </returns>
+        /// <returns>A platform specific integer representing the number of instructions
+        /// disassembled. An <c>IntPtr.Zero</c> indicates no instructions were disassembled
+        /// as a result of an error.</returns>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_disasm")]
         public static extern IntPtr Disassemble(
             [In] SafeCapstoneContextHandle pHandle,
@@ -53,7 +45,7 @@ namespace CSCapstone {
             [In] IntPtr codeSize,
             [In] ulong startingAddress,
             [In] IntPtr count,
-            [Out] out IntPtr instruction);
+            [Out] out IntPtr /* cs_insn * */ instruction);
 
         /// <summary>Free Memory Allocated For Disassembled Instructions.</summary>
         /// <param name="instructions">A pointer to a collection of disassembled

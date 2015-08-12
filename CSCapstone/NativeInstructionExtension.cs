@@ -18,7 +18,7 @@ namespace CSCapstone
                 Bytes = @this.ManagedBytes,
                 Mnemonic = @this.ManagedMnemonic,
                 Operand = @this.ManagedOperand,
-                Id = (ArchInst)(System.Enum.ToObject(typeof(ArchInst), @this.Id))
+                Id = (ArchInst)(System.Enum.ToObject(typeof(ArchInst), @this.InstructionId))
             };
         }
 
@@ -28,7 +28,7 @@ namespace CSCapstone
         public static Instruction<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> AsArmInstruction(this NativeInstruction @this)
         {
             var @object = @this.AsInstruction<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail>();
-            @object.Id = (ArmInstruction) @this.Id;
+            @object.Id = (ArmInstruction) @this.InstructionId;
 
             return @object;
         }
@@ -39,7 +39,7 @@ namespace CSCapstone
         public static Instruction<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> AsArm64Instruction(this NativeInstruction @this)
         {
             var @object = @this.AsInstruction<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>();
-            @object.Id = (Arm64Instruction) @this.Id;
+            @object.Id = (Arm64Instruction) @this.InstructionId;
 
             return @object;
         }
@@ -50,7 +50,7 @@ namespace CSCapstone
         public static Instruction<X86Instruction, X86Register, X86InstructionGroup, X86InstructionDetail> AsX86Instruction(this NativeInstruction @this)
         {
             var @object = @this.AsInstruction<X86Instruction, X86Register, X86InstructionGroup, X86InstructionDetail>();
-            @object.Id = (X86Instruction) @this.Id;
+            @object.Id = (X86Instruction) @this.InstructionId;
 
             return @object;
         }

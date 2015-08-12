@@ -4,31 +4,14 @@ using CSCapstone.Arm;
 using CSCapstone.Arm64;
 using CSCapstone.X86;
 
-namespace CSCapstone {
+namespace CSCapstone
+{
     /// <summary>Native Instruction.</summary>
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct NativeInstruction {
-        /// <summary>Instruction's Unique Identifier.</summary>
-        public uint Id;
-
-        /// <summary>Instruction's Address (EIP).</summary>
-        public ulong Address;
-
-        /// <summary>Instruction's Size.</summary>
-        public ushort Size;
-
-        /// <summary>Instruction's Machine Bytes.</summary>
-        public fixed byte Bytes [16];
-
-        /// <summary>Instruction's Mnemonic ASCII Text.</summary>
-        public fixed byte Mnemonic [32];
-
-        /// <summary>Instruction's Operand ASCII Text.</summary>
-        public fixed byte Operand [160];
-
-        /// <summary>Instruction's Architecture Independent Detail.</summary>
-        public IntPtr IndependentDetail;
-
+    public unsafe struct NativeInstruction
+    {
+        public ulong Address { get; set; }
+        public uint InstructionId { get; set; }
         /// <summary>Get Instruction's Managed Machine Bytes.</summary>
         /// <value>Convenient property to retrieve the instruction's machine bytes
         /// as a managed collection. The size of the managed collection will always
@@ -36,18 +19,7 @@ namespace CSCapstone {
         /// This property allocates managed memory for a new managed collection and
         /// uses direct memory copying tocopy the collection from unmanaged memory
         /// to managed memory every time it is invoked.</value>
-        public byte[] ManagedBytes {
-            get {
-                fixed (byte* pBytes = this.Bytes) {
-                    var pPBytes = new IntPtr(pBytes);
-                    var managedBytes = new byte[this.Size];
-
-                    Marshal.Copy(pPBytes, managedBytes, 0, this.Size);
-                    return managedBytes;
-                }
-            }
-        }
-
+        public byte[] ManagedBytes { get; private set; }
         /// <summary>Get Instruction's Managed Mnemonic Text.</summary>
         /// <value>Convenient property to retrieve the instruction's mnemonic ASCII
         /// text as a managed string. This property allocates managed memory for a
@@ -58,14 +30,7 @@ namespace CSCapstone {
         /// unmanaged string is too large to allocate in managed memory.</exception>
         /// <exception cref="System.AccessViolationException">Thrown if the unmanaged
         /// string is inaccessible.</exception>
-        public string ManagedMnemonic {
-            get {
-                fixed (byte* pMnemonic = this.Mnemonic) {
-                    return new string((sbyte*) pMnemonic);
-                }
-            }
-        }
-
+        public string ManagedMnemonic { get; private set; }
         /// <summary>Get Instruction's Managed Operand Text.</summary>
         /// <value>Convenient property to retrieve the instruction's operand ASCII
         /// text as a managed string. This property allocates managed memory for a
@@ -76,13 +41,8 @@ namespace CSCapstone {
         /// unmanaged string is too large to allocate in managed memory.</exception>
         /// <exception cref="System.AccessViolationException">Thrown if the unmanaged
         /// string is inaccessible.</exception>
-        public string ManagedOperand {
-            get {
-                fixed (byte* pOperand = this.Operand) {
-                    return new string((sbyte*) pOperand);
-                }
-            }
-        }
+        public string ManagedOperand { get; private set; }
+        public ushort Size { get; set; }
 
         /// <summary>Get Instruction's Managed Architecture Independent Detail.</summary>
         /// <value>Convenient property to retrieve the instruction's architecture
@@ -97,7 +57,6 @@ namespace CSCapstone {
                 if (this.IndependentDetail != IntPtr.Zero) {
                     managedDetail = MarshalExtension.PtrToStructure<NativeIndependentInstructionDetail>(this.IndependentDetail);
                 }
-
                 return managedDetail;
             }
         }
@@ -132,11 +91,60 @@ namespace CSCapstone {
             }
         }
 
+        internal static NativeInstruction Create(IntPtr from)
+        {
+            int offset = 0;
+            // WARNING : Do not change properties initialization order. They match
+            // the native structure field order. Order of parameters in some Helpers
+            // functions is also very sensitive.
+            NativeInstruction result = new NativeInstruction() {
+                InstructionId = Helpers.GetNativeUInt32(from, ref offset),
+                Address = Helpers.GetNativeUInt64(from, ref offset),
+                ManagedBytes = Helpers.GetNativeInlineBufferArray(from, 16, Helpers.GetNativeUInt16(from, ref offset), ref offset),
+                ManagedMnemonic = Helpers.GetAnsiString(from, 32, ref offset),
+                ManagedOperand = Helpers.GetAnsiString(from, 160, ref offset),
+            };
+            IntPtr nativeDetails = Helpers.GetNativeIntPtr(from, ref offset);
+            // TODO : Handle details.
+            throw new NotImplementedException();
+            return result;
+        }
+
         /// <summary>Get Object's String Representation.</summary>
         /// <returns>The object's string representation.</returns>
         public override string ToString() {
-            var @string = String.Format("{0} {1}", this.ManagedMnemonic, this.ManagedOperand);
-            return @string;
+            return String.Format("{0} {1}", this.ManagedMnemonic, this.ManagedOperand);
         }
+    
+        /// <summary>Instruction ID (basically a numeric ID for the instruction mnemonic)
+        /// Find the instruction id in the '[ARCH]_insn' enum in the header file  of
+        /// corresponding architecture, such as 'arm_insn' in arm.h for ARM, 'x86_insn'
+        /// in x86.h for X86, etc... This information is available even when CS_OPT_DETAIL =
+        /// CS_OPT_OFF
+        /// NOTE: in Skipdata mode, "data" instruction has 0 for this id field.</summary>
+        // unsigned int Id;
+        /// <summary>Address (EIP) of this instruction. This information is available
+        /// even when CS_OPT_DETAIL = CS_OPT_OFF.</summary>
+        // uint64_t Address;
+        /// <summary>Size of this instruction. This information is available even
+        /// when CS_OPT_DETAIL = CS_OPT_OFF.</summary>
+        // uint16_t Size;
+        /// <summary>Machine bytes of this instruction, with number of bytes indicated
+        /// by @size above This information is available even when CS_OPT_DETAIL =
+        /// CS_OPT_OFF.</summary>
+        // public fixed byte Bytes[16];
+        /// <summary>Ascii text of instruction mnemonic. This information is available
+        /// even when CS_OPT_DETAIL = CS_OPT_OFF</summary>
+        // public fixed byte Mnemonic[32];
+        /// <summary>Ascii text of instruction operands. This information is available
+        /// even when CS_OPT_DETAIL = CS_OPT_OFF.</summary>
+        public fixed byte Operand[160];
+        /// <summary>Pointer to cs_detail. NOTE: detail pointer is only valid when
+        /// both requirements below are met:
+        /// (1) CS_OP_DETAIL = CS_OPT_ON
+        /// (2) Engine is not in Skipdata mode (CS_OP_SKIPDATA option set to CS_OPT_ON)
+        /// NOTE 2: when in Skipdata mode, or when detail mode is OFF, even if this
+        /// pointer is not NULL, its content is still irrelevant.</summary>
+        public IntPtr /* cs_detail * */ IndependentDetail;
     }
 }

@@ -78,34 +78,6 @@ namespace CSCapstone {
         }
 
         /// <summary>
-        ///     Marshal a Pointer to a Collection of Structures.
-        /// </summary>
-        /// <typeparam name="T">
-        ///     The collection's type.
-        /// </typeparam>
-        /// <param name="p">
-        ///     A pointer to a collection. The pointer should be initialized to the collection's starting address.
-        /// </param>
-        /// <param name="size">
-        ///     The collection's size.
-        /// </param>
-        /// <returns>
-        ///     The destination collection.
-        /// </returns>
-        internal static T[] PtrToStructure<T>(IntPtr p, int size) {
-            var array = new T[size];
-            var index = p;
-            for (var i = 0; i < size; i++) {
-                var element = MarshalExtension.PtrToStructure<T>(index);
-                array[i] = element;
-
-                index += Marshal.SizeOf(typeof (T));
-            }
-
-            return array;
-        }
-
-        /// <summary>
         ///     Get a Type's Size.
         /// </summary>
         /// <typeparam name="T">
