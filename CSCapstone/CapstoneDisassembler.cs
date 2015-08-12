@@ -91,22 +91,6 @@ namespace CSCapstone {
             return native;
         }
 
-        /// <summary>Create an ARM Disassembler.</summary>
-        /// <param name="mode">The disassembler's mode.</param>
-        /// <returns>A capstone disassembler.</returns>
-        public static CapstoneArmDisassembler CreateArmDisassembler(DisassembleMode mode)
-        {
-            return new CapstoneArmDisassembler(mode);
-        }
-
-        /// <summary>Create a ARM64 Disassembler.</summary>
-        /// <param name="mode">The disassembler's mode.</param>
-        /// <returns>A capstone disassembler.</returns>
-        public static CapstoneArm64Disassembler CreateArm64Disassembler(DisassembleMode mode)
-        {
-            return new CapstoneArm64Disassembler(mode);
-        }
-
         /// <summary>Create a Dissembled Instruction.</summary>
         /// <param name="nativeInstruction">A native instruction.</param>
         /// <returns>A dissembled instruction.</returns>
@@ -136,16 +120,16 @@ namespace CSCapstone {
             IntPtr nativeInstructions;
             IntPtr instructionsCount = CapstoneImport.Disassemble(this, code, (IntPtr)code.Length,
                 startingAddress, (IntPtr)count, out nativeInstructions);
-            if (IntPtr.Zero == instructionsCount)
-            {
+            if (IntPtr.Zero == instructionsCount) {
                 CapstoneImport.GetLastError(this).ThrowOnCapstoneError();
             }
-            var instructions = MarshalExtension.PtrToStructure<NativeInstruction>(nativeInstructions, (int)instructionsCount);
+            NativeInstruction[] instructions = 
+                MarshalExtension.PtrToStructure<NativeInstruction>(nativeInstructions, (int)instructionsCount);
             SafeNativeInstructionHandle localHandle = 
                 new SafeNativeInstructionHandle(instructions, nativeInstructions, instructionsCount);
 
-            return localHandle
-                .Instructions
+            // return localHandle
+            return instructions
                 .Select(this.CreateInstruction)
                 .ToArray();
         }
@@ -164,31 +148,13 @@ namespace CSCapstone {
             return this.Disassemble(code, 0, startingAddress);
         }
 
-        /// <summary>Disassemble Binary Code.</summary>
-        /// <param name="code">A collection of bytes representing the binary code
-        /// to disassemble. Should not be a null reference.</param>
-        /// <returns>A collection of dissembled instructions.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if the binary
-        /// code could not be disassembled.</exception>
-        [Obsolete("Use Disassemble instead.")]
-        public Instruction<Inst, Reg, Group, Detail>[] DisassembleAll(byte[] code)
-        {
-            return Disassemble(code);
-        }
-
         /// <summary>Dispose Disassembler.</summary>
-        public void Dispose() {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>Dispose Disassembler.</summary>
-        /// <param name="disposing">
-        ///     A boolean true if the disassembler is being disposed from application code. A boolean false otherwise.
-        /// </param>
-        protected virtual void Dispose(bool disposing) {
+        /// <param name="disposing">A boolean true if the disassembler is being
+        /// disposed from application code. A boolean false otherwise.</param>
+        protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             if (!this._disposed) {
+                GC.SuppressFinalize(this);
                 this._disposed = true;
             }
         }
