@@ -82,7 +82,9 @@ namespace CSCapstone {
         /// <param name="groupId">group id</param>
         /// <returns>string name of the group, or NULL if @group_id is invalid.</returns>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_group_name", CharSet = CharSet.Ansi)]
-        public static extern string GroupName(IntPtr pHandle, uint groupId);
+        public static extern string GroupName(
+            [In] SafeCapstoneContextHandle pHandle,
+            [In] uint groupId);
 
         /// <summary>Resolve an Instruction Unique Identifier to an Instruction Name.
         /// </summary>
@@ -92,7 +94,9 @@ namespace CSCapstone {
         /// <c>IntPtr.Zero</c> indicates the instruction's unique identifier is
         /// invalid.</returns>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_insn_name", CharSet=CharSet.Ansi)]
-        public static extern string InstructionName(IntPtr pHandle, uint id);
+        public static extern string InstructionName(
+            [In] SafeCapstoneContextHandle pHandle,
+            [In] uint instructionId);
 
         /// <summary>Create a Capstone native handle that stands for a disassembler
         /// for the given architecture and mode pair.</summary>
@@ -104,24 +108,19 @@ namespace CSCapstone {
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_open")]
         internal static extern CapstoneErrorCode Open(
             [In] DisassembleArchitecture architecture,
-            [In] DisassembleMode mode, 
+            [In] DisassembleMode mode,
             [Out] out IntPtr handle);
 
-        /// <summary>
-        ///     Resolve a Registry Unique Identifier to an Registry Name.
-        /// </summary>
-        /// <param name="pHandle">
-        ///     A pointer to a Capstone handle.
-        /// </param>
-        /// <param name="id">
-        ///     A registry's unique identifier.
-        /// </param>
-        /// <returns>
-        ///     A pointer to a string representing the registry's name. An <c>IntPtr.Zero</c> indicates the
-        ///     registry's unique identifier is invalid.
+        /// <summary>Resolve a Registry Unique Identifier to an Registry Name.</summary>
+        /// <param name="pHandle">A pointer to a Capstone handle.</param>
+        /// <param name="registryId">A registry's unique identifier.</param>
+        /// <returns>A pointer to a string representing the registry's name. An
+        /// <c>IntPtr.Zero</c> indicates the registry's unique identifier is invalid.
         /// </returns>
-        [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_reg_name")]
-        public static extern IntPtr RegistryName(IntPtr pHandle, uint id);
+        [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, CharSet=CharSet.Ansi, EntryPoint = "cs_reg_name")]
+        public static extern string RegistryName(
+            [In] SafeCapstoneContextHandle pHandle,
+            [In] uint registryId);
 
         /// <summary>Set a Disassemble Option.</summary>
         /// <param name="pHandle">A Capston context (a.k.a a disassembler).</param>

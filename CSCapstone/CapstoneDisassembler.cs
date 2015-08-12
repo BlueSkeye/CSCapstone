@@ -131,9 +131,20 @@ namespace CSCapstone {
         /// <exception cref="System.InvalidOperationException">Thrown if the binary
         /// code could not be disassembled.</exception>
         public Instruction<Inst, Reg, Group, Detail>[] Disassemble(
-            byte[] code, int count = 0, long startingAddress = 0x1000)
+            byte[] code, int count = 0, ulong startingAddress = 0x1000)
         {
-            return NativeCapstone.Disassemble(this, code, count, startingAddress)
+            IntPtr nativeInstructions;
+            IntPtr instructionsCount = CapstoneImport.Disassemble(this, code, (IntPtr)code.Length,
+                startingAddress, (IntPtr)count, out nativeInstructions);
+            if (IntPtr.Zero == instructionsCount)
+            {
+                CapstoneImport.GetLastError(this).ThrowOnCapstoneError();
+            }
+            var instructions = MarshalExtension.PtrToStructure<NativeInstruction>(nativeInstructions, (int)instructionsCount);
+            SafeNativeInstructionHandle localHandle = 
+                new SafeNativeInstructionHandle(instructions, nativeInstructions, instructionsCount);
+
+            return localHandle
                 .Instructions
                 .Select(this.CreateInstruction)
                 .ToArray();
@@ -148,7 +159,7 @@ namespace CSCapstone {
         /// <exception cref="System.InvalidOperationException">Thrown if the binary
         /// code could not be disassembled.</exception>
         public Instruction<Inst, Reg, Group, Detail>[] DisassembleAll(
-            byte[] code, long startingAddress)
+            byte[] code, ulong startingAddress)
         {
             return this.Disassemble(code, 0, startingAddress);
         }

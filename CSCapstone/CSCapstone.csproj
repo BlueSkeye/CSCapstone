@@ -131,7 +131,6 @@
     <Compile Include="Arm\NativeArmInstructionOperand.cs" />
     <Compile Include="Arm\NativeArmShifter.cs" />
     <Compile Include="Arm\NativeArmInstructionOperandValue.cs" />
-    <Compile Include="NativeCapstone.cs" />
     <Compile Include="NativeIndependentInstructionDetailExtension.cs" />
     <Compile Include="NativeInstruction.cs" />
     <Compile Include="NativeIndependentInstructionDetail.cs" />
