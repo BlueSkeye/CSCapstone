@@ -58,7 +58,7 @@ namespace CSCapstone {
         /// otherwise.</returns>
         protected override bool ReleaseHandle()
         {
-            CapstoneImport.Free(this.InstructionPointer, this._instructionCount);
+            CapstoneImport.Free(this, this._instructionCount);
             this._instructions = Enumerable.Empty<NativeInstruction>();
             return true;
         }

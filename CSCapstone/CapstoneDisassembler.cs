@@ -12,6 +12,17 @@ namespace CSCapstone {
     public abstract class CapstoneDisassembler<Inst, Reg, Group, Detail> 
         : SafeCapstoneContextHandle, IDisposable
     {
+        /// <summary>This class initializer is intended to collect some immutable
+        /// global information from the native library.</summary>
+        static CapstoneDisassembler()
+        {
+            AllArchitectureSupported = CapstoneImport.IsSupported(CapstoneImport.SpecialMode.AllArchitecture);
+            DietModeEnabled = CapstoneImport.IsSupported(CapstoneImport.SpecialMode.DietMode);
+            X86ReduceEnabled = CapstoneImport.IsSupported(CapstoneImport.SpecialMode.X86Reduce);
+            CapstoneImport.GetLibraryVersion(out _libraryMajorVersion, out _libraryMinorVersion);
+            return;
+        }
+
         /// <summary>Create a Disassembler.</summary>
         /// <param name="architecture">The disassembler's architecture.</param>
         /// <param name="mode">The disassembler's mode.</param>
@@ -25,8 +36,16 @@ namespace CSCapstone {
             return;
         }
 
+        /// <summary>Get a flag that tell whether the Capstone native library has
+        /// been compiled with all architectures available or not.</summary>
+        public static bool AllArchitectureSupported { get; private set; }
+
         /// <summary>Get Disassembler's Architecture.</summary>
         public DisassembleArchitecture Architecture { get; private set; }
+
+        /// <summary>Get a flag that tell whether the Capstone native library has
+        /// been compiled with DIET_MODE or not.</summary>
+        public static bool DietModeEnabled { get; private set; }
 
         /// <summary>
         ///     Enable or Disable Disassemble Details.
@@ -47,6 +66,29 @@ namespace CSCapstone {
                     .ThrowOnCapstoneError();
                 this._detailsFlag = value;
             }
+        }
+
+        /// <summary>Retrieve last error that occured on this disassembler.</summary>
+        public CapstoneErrorCode LastError
+        {
+            get { return CapstoneImport.GetLastError(this); }
+        }
+
+        /// <summary>Retrieve a text representation of the last errror that
+        /// occurred on this disassembler.</summary>
+        public string LastErrorText
+        {
+            get { return CapstoneImport.GetErrorText(CapstoneImport.GetLastError(this)); }
+        }
+
+        public static int LibraryMajorVersion
+        {
+            get { return _libraryMajorVersion; }
+        }
+
+        public static int LibraryMinorVersion
+        {
+            get { return _libraryMinorVersion; }
         }
 
         /// <summary>Get and Set Disassembler's Mode.</summary>
@@ -77,6 +119,10 @@ namespace CSCapstone {
                 this._syntax = value;
             }
         }
+
+        /// <summary>Get a flag that tell whether the Capstone native library has
+        /// been compiled with CAPSTONE_X86_REDUCE or not.</summary>
+        public static bool X86ReduceEnabled { get; private set; }
 
         /// <summary>Invoke the native Capstone exported function that will open
         /// a disassembler for the given pair of architecture and mode.</summary>
@@ -191,6 +237,39 @@ namespace CSCapstone {
             yield break;
         }
 
+        /// <summary>Return friendly name of a group id (that an instruction can
+        /// belong to) Find the group id from header file of corresponding
+        /// architecture (arm.h for ARM, x86.h for X86, ...)</summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        /// <remarks>Attempt to invoke this method with Capstone native library
+        /// compiled in diet mode will throw an exception.</remarks>
+        public string GetGroupName(uint groupId)
+        {
+            if (DietModeEnabled) {
+                throw new InvalidOperationException("Diet mode enabled.");
+            }
+            return CapstoneImport.GroupName(this, groupId);
+        }
+
+        /// <summary>Resolve an Instruction Unique Identifier to an Instruction Name.
+        /// </summary>
+        /// <returns>A string representing instruction name of a null reference if
+        /// the unique identifier is invalid.</returns>
+        public string GetInstructionName(uint instructionId)
+        {
+            return CapstoneImport.GroupName(this, instructionId);
+        }
+
+        /// <summary>Resolve a Registry Unique Identifier to an Registry Name.
+        /// </summary>
+        /// <returns>A string representing registry name of a null reference if
+        /// the unique identifier is invalid.</returns>
+        public string GetRegistryName(uint registryId)
+        {
+            return CapstoneImport.GroupName(this, registryId);
+        }
+
         /// <summary>Set Disassemble Syntax Option.</summary>
         /// <param name="value">A syntax option value.</param>
         /// <exception cref="System.InvalidOperationException">
@@ -207,6 +286,8 @@ namespace CSCapstone {
         private bool _detailsFlag;
         /// <summary>Disposed Flag.</summary>
         private bool _disposed;
+        private static readonly int _libraryMajorVersion;
+        private static readonly int _libraryMinorVersion;
         /// <summary>Disassembler's Mode.</summary>
         private DisassembleMode _mode;
         /// <summary>Disassembler's Syntax.</summary>
