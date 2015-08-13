@@ -42,7 +42,7 @@ namespace CSCapstone {
         /// </summary>
         /// <value>
         ///     Convenient property to retrieve the implicit groups an instruction belongs to as a managed collection.
-        ///     The size of the managed collection will always be equal to the value represented by
+        ///     The codeSize of the managed collection will always be equal to the value represented by
         ///     <c>NativeInstructionIndependentDetail.GroupCount</c>. This property allocates managed memory for a new
         ///     managed collection and uses direct memory copying to copy the collection from unmanaged memory to
         ///     managed memory every time it is invoked.
@@ -64,7 +64,7 @@ namespace CSCapstone {
         /// </summary>
         /// <value>
         ///     Convenient property to retrieve the implicit registers read by an instruction as a managed collection.
-        ///     The size of the managed collection will always be equal to the value represented by
+        ///     The codeSize of the managed collection will always be equal to the value represented by
         ///     <c>NativeInstructionIndependentDetail.ReadRegisterCount</c>. This property allocates managed memory
         ///     for a new managed collection and uses direct memory copying to copy the collection from unmanaged
         ///     memory to managed memory every time it is invoked.
@@ -86,7 +86,7 @@ namespace CSCapstone {
         /// </summary>
         /// <value>
         ///     Convenient property to retrieve the implicit registers written by an instruction as a managed
-        ///     collection. The size of the managed collection will always be equal to the value represented by
+        ///     collection. The codeSize of the managed collection will always be equal to the value represented by
         ///     <c>NativeInstructionIndependentDetail.WrittenRegisterCount</c>. This property allocates managed memory
         ///     for a new managed collection and uses direct memory copying to copy the collection from unmanaged
         ///     memory to managed memory every time it is invoked.

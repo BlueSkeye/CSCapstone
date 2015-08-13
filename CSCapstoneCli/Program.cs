@@ -23,7 +23,7 @@ namespace CSCapstoneCli {
             Console.WriteLine();
 
             Console.SetBufferSize(80, 480);
-            Console.Write("Choose an Architecture (ARM32, ARM32-V8, ARM32-Thumb, ARM32-Thumb-MClass, ARM64, X86): --> ");
+            Console.Write("Choose an Architecture (ARM32, ARM32-V8, ARM32-Thumb, ARM32-Thumb-MClass, ARM64, X86, X86-Iter): --> ");
 
             var architecture = Console.ReadLine();
             Console.WriteLine();
@@ -45,6 +45,9 @@ namespace CSCapstoneCli {
                     break;
                 case "X86":
                     Program.ShowX86();
+                    break;
+                case "X86-Iter":
+                    Program.ShowX86(true);
                     break;
                 default:
                     Console.WriteLine("ERROR: You did not select a correct architecture. Good bye Steve!");
@@ -307,7 +310,13 @@ namespace CSCapstoneCli {
             }
         }
 
-        internal static void ShowX86() {
+        private static bool OnX86DisassembledInstruction(NativeInstruction instruction,
+            int size, ulong address)
+        {
+            return true;
+        }
+
+        internal static void ShowX86(bool iteratively = false) {
             // Create X86 Disassembler.
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
@@ -328,6 +337,11 @@ namespace CSCapstoneCli {
                 //
                 // ...
                 var code = new byte[] {0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00, 0x05, 0x23, 0x01, 0x00, 0x00, 0x36, 0x8b, 0x84, 0x91, 0x23, 0x01, 0x00, 0x00, 0x41, 0x8d, 0x84, 0x39, 0x89, 0x67, 0x00, 0x00, 0x8d, 0x87, 0x89, 0x67, 0x00, 0x00, 0xb4, 0xc6};
+
+                if (iteratively) {
+                    disassembler.Disassemble(code, OnX86DisassembledInstruction);
+                    return;
+                }
                 var instructions = disassembler.Disassemble(code);
 
                 var hexCode = BitConverter.ToString(code).Replace("-", " ");

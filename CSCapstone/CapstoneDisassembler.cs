@@ -168,6 +168,54 @@ namespace CSCapstone {
                 .ToArray();
         }
 
+        /// <summary>A callback method to be invoked </summary>
+        /// <param name="instruction">The instruction that has been retrieved. If
+        /// this is a null reference pointer, an error occurred. The delegate
+        /// implementation is advised to invoke the <see cref="LastErrorText"/>
+        /// and/or <see cref="LastError"/> on this disassembler in order to discover
+        /// what went wrong.</param>
+        /// <param name="codeSize">The codeSize of the disassembled instruction.</param>
+        /// <param name="address">The address of the disassembled instruction.</param>
+        /// <returns>true if disassembly should continue, false otherwise.</returns>
+        public delegate bool IterativeDisassemblyDelegate(NativeInstruction instruction,
+            int size, ulong address);
+
+        /// <summary>Iteratively disassemble source code.</summary>
+        /// <param name="callback">A delegate that will be invoked on each disassembled
+        /// instruction.</param>
+        public void Disassemble(byte[] code, IterativeDisassemblyDelegate callback)
+        {
+            bool shouldContinue = true;
+            ulong address = DefaultStartAddress;
+            int totalSize = 0;
+            IntPtr nativeCode = IntPtr.Zero;
+            try {
+                using (SafeNativeInstructionHandle hInstruction = CapstoneImport.AllocateInstruction(this)) {
+                    IntPtr nativeInstruction = hInstruction.DangerousGetHandle();
+                    // Transfer the managed byte array into a native buffer.
+                    nativeCode = Marshal.AllocCoTaskMem(code.Length);
+                    Marshal.Copy(code, 0, nativeCode, code.Length);
+                    IntPtr remainingSize = (IntPtr)code.Length;
+
+                    do {
+                        ulong instructionStartAddress = address;
+                        shouldContinue |= CapstoneImport.DisassembleIteratively(this,
+                            ref nativeCode, ref remainingSize, ref address, hInstruction);
+                        if (shouldContinue) {
+                            int instructionSize = (int)(address - instructionStartAddress);
+                            totalSize += instructionSize;
+                            shouldContinue |= callback(NativeInstruction.Create(this, nativeInstruction),
+                                instructionSize, address);
+                        }
+                    } while (shouldContinue && (0 < (long)remainingSize));
+                    // TODO : Consider releasing nativeInstruction handle.
+                }
+            }
+            finally {
+                if (IntPtr.Zero != nativeCode) { Marshal.FreeCoTaskMem(nativeCode); }
+            }
+        }
+
         /// <summary>Disassemble Binary Code.</summary>
         /// <param name="code">A collection of bytes representing the binary code to
         /// disassemble. Should not be a null reference.</param>
@@ -224,14 +272,14 @@ namespace CSCapstone {
         /// instances marshaled back from a call to cs_disasm.</summary>
         /// <param name="pNativeArray">A pointer to the native collection. The pointer
         /// should be initialized to the collection's starting address.</param>
-        /// <param name="size">The collection's size.</param>
+        /// <param name="codeSize">The collection's codeSize.</param>
         /// <returns>An enumerable object.</returns>
         /// <remarks>CAUTION : Make sure not to release native memory until you are
         /// done with the enumerator.</remarks>
-        private static IEnumerable<NativeInstruction> EnumerateNativeInstructions(IntPtr pNativeArray, int size)
+        private IEnumerable<NativeInstruction> EnumerateNativeInstructions(IntPtr pNativeArray, int size)
         {
             for (int index = 0; index < size; index++) {
-                yield return NativeInstruction.Create(pNativeArray);
+                yield return NativeInstruction.Create(this, pNativeArray);
                 pNativeArray += Marshal.SizeOf(typeof(NativeInstruction));
             }
             yield break;
@@ -281,7 +329,7 @@ namespace CSCapstone {
                 .ThrowOnCapstoneError();
         }
 
-        private const long DefaultStatsAddress = 0x1000;
+        private const long DefaultStartAddress = 0x1000;
         /// <summary>Disassembler's Details Flag.</summary>
         private bool _detailsFlag;
         /// <summary>Disposed Flag.</summary>

@@ -25,8 +25,8 @@ namespace CSCapstone {
         /// <summary>
         ///     Allocate Memory For a Structure.
         /// </summary>
-        /// <param name="size">
-        ///     The collection's size.
+        /// <param name="codeSize">
+        ///     The collection's codeSize.
         /// </param>
         /// <typeparam name="T">
         ///     The structure's type.
@@ -84,7 +84,7 @@ namespace CSCapstone {
         ///     The type.
         /// </typeparam>
         /// <returns>
-        ///     The type's size, in bytes.
+        ///     The type's codeSize, in bytes.
         /// </returns>
         internal static int SizeOf<T>() {
             var size = Marshal.SizeOf(typeof (T));

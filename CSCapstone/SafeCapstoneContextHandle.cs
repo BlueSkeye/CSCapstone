@@ -11,7 +11,7 @@ namespace CSCapstone
             return;
         }
 
-        protected SafeCapstoneContextHandle(IntPtr handle)
+        public SafeCapstoneContextHandle(IntPtr handle)
             : base(handle)
         {
             return;

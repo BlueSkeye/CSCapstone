@@ -14,7 +14,7 @@ namespace CSCapstone
         public uint InstructionId { get; set; }
         /// <summary>Get Instruction's Managed Machine Bytes.</summary>
         /// <value>Convenient property to retrieve the instruction's machine bytes
-        /// as a managed collection. The size of the managed collection will always
+        /// as a managed collection. The codeSize of the managed collection will always
         /// be equal to the value represented by <c>NativeInstruction.Size</c>.
         /// This property allocates managed memory for a new managed collection and
         /// uses direct memory copying tocopy the collection from unmanaged memory
@@ -42,7 +42,7 @@ namespace CSCapstone
         /// <exception cref="System.AccessViolationException">Thrown if the unmanaged
         /// string is inaccessible.</exception>
         public string ManagedOperand { get; private set; }
-        public ushort Size { get; set; }
+        // public ushort Size { get; set; }
 
         /// <summary>Get Instruction's Managed Architecture Independent Detail.</summary>
         /// <value>Convenient property to retrieve the instruction's architecture
@@ -91,7 +91,12 @@ namespace CSCapstone
             }
         }
 
-        internal static NativeInstruction Create(IntPtr from)
+        /// <summary>Create a managed representation of a native instruction from
+        /// the given native buffer.</summary>
+        /// <param name="from">Native data to be decoded.</param>
+        /// <returns>An instance of this class.</returns>
+        internal static NativeInstruction Create<Inst, Reg, Group, Detail>(
+            CapstoneDisassembler<Inst, Reg, Group, Detail> onBehalfOf, IntPtr from)
         {
             int offset = 0;
             // WARNING : Do not change properties initialization order. They match
@@ -106,7 +111,6 @@ namespace CSCapstone
             };
             IntPtr nativeDetails = Helpers.GetNativeIntPtr(from, ref offset);
             // TODO : Handle details.
-            throw new NotImplementedException();
             return result;
         }
 
@@ -130,7 +134,7 @@ namespace CSCapstone
         /// when CS_OPT_DETAIL = CS_OPT_OFF.</summary>
         // uint16_t Size;
         /// <summary>Machine bytes of this instruction, with number of bytes indicated
-        /// by @size above This information is available even when CS_OPT_DETAIL =
+        /// by @codeSize above This information is available even when CS_OPT_DETAIL =
         /// CS_OPT_OFF.</summary>
         // public fixed byte Bytes[16];
         /// <summary>Ascii text of instruction mnemonic. This information is available
@@ -138,7 +142,7 @@ namespace CSCapstone
         // public fixed byte Mnemonic[32];
         /// <summary>Ascii text of instruction operands. This information is available
         /// even when CS_OPT_DETAIL = CS_OPT_OFF.</summary>
-        public fixed byte Operand[160];
+        // public fixed byte Operand[160];
         /// <summary>Pointer to cs_detail. NOTE: detail pointer is only valid when
         /// both requirements below are met:
         /// (1) CS_OP_DETAIL = CS_OPT_ON

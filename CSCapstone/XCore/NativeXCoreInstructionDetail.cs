@@ -56,7 +56,7 @@ namespace CSCapstone.XCore {
         ///     Get Instruction's Managed Operands.
         /// </summary>
         /// <value>
-        ///     Convenient property to retrieve the instruction's operands as a managed collection. The size of the
+        ///     Convenient property to retrieve the instruction's operands as a managed collection. The codeSize of the
         ///     managed collection will always be equal to the value represented by
         ///     <c>NativePowerPcInstructionDetail.OperandCount</c>. This property allocates managed memory for a new
         ///     managed collection and copies by value the required <c>NativePowerPcInstructionDetail.Operand</c>

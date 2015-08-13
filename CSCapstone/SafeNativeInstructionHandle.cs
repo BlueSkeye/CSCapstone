@@ -11,8 +11,20 @@ namespace CSCapstone {
     /// has been processed by application code to avoid memory leaks. A safe handle
     /// ensures that memory is eventually freed automatically if application code
     /// fails to free it explicitly.</remarks>
-    public sealed class SafeNativeInstructionHandle : SafeHandleZeroOrMinusOneIsInvalid
+    public sealed class SafeNativeInstructionHandle : SafeCapstoneHandle
     {
+        public SafeNativeInstructionHandle()
+            : base(true)
+        {
+            return;
+        }
+
+        protected SafeNativeInstructionHandle(IntPtr handle)
+            : base(handle)
+        {
+            return;
+        }
+
         /// <summary>Create a Safe Native Instruction Handle.</summary>
         /// <param name="instructions">A collection of instructions. Should not be a
         /// null reference.</param>

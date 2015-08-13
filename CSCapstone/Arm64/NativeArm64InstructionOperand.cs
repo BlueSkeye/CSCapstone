@@ -85,7 +85,7 @@ namespace CSCapstone.Arm64 {
         ///     Get Instruction's Managed Vector Element Size Specifier.
         /// </summary>
         /// <value>
-        ///     Convenient property to retrieve the instruction's vector element size specifier as a managed
+        ///     Convenient property to retrieve the instruction's vector element codeSize specifier as a managed
         ///     enumerated type.
         /// </value>
         public Arm64VectorElementSizeSpecifier ManagedVectorElementSizeSpecifier {
