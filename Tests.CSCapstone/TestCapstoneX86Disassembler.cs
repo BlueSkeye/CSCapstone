@@ -12,12 +12,12 @@ namespace Tests.CSCapstone {
         [Test]
         public void TestCreate() {
             try {
-                using (var disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32)) {
+                using (var disassembler = new X86Disassembler(DisassemblerBase.SupportedMode.Bit32)) {
                     Assert.IsNotNull(disassembler);
-                    Assert.AreEqual(disassembler.Architecture, DisassembleArchitecture.X86);
+                    Assert.AreEqual(disassembler.Architecture, DisassemblerBase.SupportedArchitecture.X86);
                     Assert.AreEqual(disassembler.EnableDetails, false);
-                    Assert.AreEqual(disassembler.Mode, DisassembleMode.Bit32);
-                    Assert.AreEqual(disassembler.Syntax, DisassembleSyntaxOptionValue.Default);
+                    Assert.AreEqual(disassembler.Mode, DisassemblerBase.SupportedMode.Bit32);
+                    Assert.AreEqual(disassembler.Syntax, DisassemblerBase.SyntaxOptionValue.Default);
                 }
             }
             catch (System.Exception e) {
@@ -37,8 +37,7 @@ namespace Tests.CSCapstone {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32))
-            {
+            using (var disassembler = new X86Disassembler(DisassemblerBase.SupportedMode.Bit32)) {
                 Assert.IsNotNull(disassembler);
 
                 // Enable Disassemble Details.
@@ -50,7 +49,7 @@ namespace Tests.CSCapstone {
                 // Set Disassembler's Syntax.
                 //
                 // Make the disassembler generate instructions in Intel syntax.
-                disassembler.Syntax = DisassembleSyntaxOptionValue.Intel;
+                disassembler.Syntax = DisassemblerBase.SyntaxOptionValue.Intel;
 
                 // Disassemble All Binary Code.
                 //

@@ -1,14 +1,19 @@
 ﻿namespace CSCapstone.Arm64
 {
     /// <summary>Capstone ARM64 Disassembler.</summary>
-    public sealed class CapstoneArm64Disassembler : CapstoneDisassembler<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>
+    public sealed class CapstoneArm64Disassembler : Disassembler<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>
     {
         /// <summary>Create a Capstone ARM64 Disassembler.</summary>
         /// <param name="mode">The disassembler's mode.</param>
-        public CapstoneArm64Disassembler(DisassembleMode mode)
-            : base(DisassembleArchitecture.Arm64, mode)
+        public CapstoneArm64Disassembler(SupportedMode mode)
+            : base(SupportedArchitecture.Arm64, mode)
         {
             return;
+        }
+
+        protected override Instruction<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> CreateInstruction(System.IntPtr nativeInstruction)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -20,7 +25,7 @@
         /// <returns>
         ///     A dissembled instruction.
         /// </returns>
-        protected override Instruction<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> CreateInstruction(NativeInstruction nativeInstruction) {
+        protected override Instruction<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> CreateInstruction(InstructionBase nativeInstruction) {
             var @object = nativeInstruction.AsArm64Instruction();
 
             // Get Native Instruction's Managed Independent Detail.
@@ -29,7 +34,7 @@
             // new memory every time it is retrieved.
             var nativeIndependentInstructionDetail = nativeInstruction.ManagedIndependentDetail;
             if (nativeIndependentInstructionDetail != null) {
-                @object.ArchitectureDetail = nativeInstruction.NativeArm64Detail.AsArm64InstructionDetail(@object.Id);
+                @object.ArchitectureDetail = nativeInstruction.NativeArm64Detail.AsArm64InstructionDetail(@object.InstructionId);
                 @object.IndependentDetail = nativeIndependentInstructionDetail.Value.AsArm64IndependentInstructionDetail();
             }
 

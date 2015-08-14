@@ -34,7 +34,7 @@ namespace CSCapstone {
         /// unmanaged memory.</param>
         /// <param name="instructionCount">A platform specific integer representing
         /// the number of disassembled instructions in unmanaged memory.</param>
-        public SafeNativeInstructionHandle(IEnumerable<NativeInstruction> instructions,
+        public SafeNativeInstructionHandle(IEnumerable<InstructionBase> instructions,
             IntPtr pInstructions, IntPtr instructionCount)
             : base(true)
         {
@@ -44,7 +44,7 @@ namespace CSCapstone {
         }
 
         /// <summary>Get Instructions.</summary>
-        public IEnumerable<NativeInstruction> Instructions {
+        public IEnumerable<InstructionBase> Instructions {
             get {
                 return this._instructions;
             }
@@ -80,14 +80,14 @@ namespace CSCapstone {
                 }
                 finally { _beingFreed = null; }
             }
-            this._instructions = Enumerable.Empty<NativeInstruction>();
+            this._instructions = Enumerable.Empty<InstructionBase>();
             return true;
         }
     
         /// <summary>Instruction Count.</summary>
         private readonly IntPtr _instructionCount;
         /// <summary>Instructions.</summary>
-        private IEnumerable<NativeInstruction> _instructions;
+        private IEnumerable<InstructionBase> _instructions;
         private static readonly object ReleaseLock = new object();
         private static SafeNativeInstructionHandle _beingFreed;
 

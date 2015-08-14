@@ -7,7 +7,7 @@
         /// <summary>Out of Memory Error Code.</summary>
         OutOfMemory = 1,
 
-        /// <summary>Unsupported Architecture Error Code.</summary>
+        /// <summary>Unsupported SupportedArchitecture Error Code.</summary>
         UnsupportedArchitecture = 2,
 
         /// <summary>Invalid Handle Error Code.</summary>

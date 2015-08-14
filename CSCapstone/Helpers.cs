@@ -22,6 +22,12 @@ namespace CSCapstone
             finally { offset += (int)inlineSize; }
         }
 
+        internal static byte GetNativeByte(IntPtr baseAddress, ref int offset)
+        {
+            try { return Marshal.ReadByte(baseAddress, offset); }
+            finally { offset += 1; }
+        }
+
         internal static byte[] GetNativeInlineBufferArray(IntPtr baseAddress, uint inlineSize,
             uint usedSize, ref int offset)
         {

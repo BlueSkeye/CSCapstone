@@ -10,8 +10,6 @@ namespace CSCapstone {
         /// <param name="pHandle">handle returned by <see cref="Open"/></param>
         /// <returns>when no longer in use, you can reclaim the memory allocated for
         /// this instruction with cs_free(insn, 1)</returns>
-        /// <remarks>TODO : This function is defined albeit not used anywhere.
-        /// </remarks>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_malloc")]
         internal static extern SafeNativeInstructionHandle AllocateInstruction(
             [In] SafeCapstoneContextHandle pHandle);
@@ -109,7 +107,7 @@ namespace CSCapstone {
         /// otherwise.</returns>
         /// <remarks>
         /// TODO : This function is not used for now. Define a clean public method
-        /// or set of methods in the CapstoneDisassembler class.
+        /// or set of methods in the Disassembler class.
         /// 
         /// NOTE 1: this API will update @code, @codeSize & @address to point to
         /// the next instruction in the input buffer. Therefore, it is convenient to
@@ -281,8 +279,8 @@ namespace CSCapstone {
         /// <returns>One of the predefined Capstone return codes.</returns>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_open")]
         internal static extern CapstoneErrorCode Open(
-            [In] DisassembleArchitecture architecture,
-            [In] DisassembleMode mode,
+            [In] DisassemblerBase.SupportedArchitecture architecture,
+            [In] DisassemblerBase.SupportedMode mode,
             [Out] out IntPtr handle);
 
         /// <summary>Resolve a Registry Unique Identifier to an Registry Name.</summary>
@@ -304,7 +302,7 @@ namespace CSCapstone {
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_option")]
         internal static extern CapstoneErrorCode SetOption(
             [In] SafeCapstoneContextHandle pHandle,
-            [In] DisassembleOptionType option,
+            [In] DisassemblerBase.Option option,
             [In] IntPtr value);
 
         /// <summary>For use by  the IsSupported function.</summary>

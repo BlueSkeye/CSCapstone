@@ -1,14 +1,19 @@
 ﻿namespace CSCapstone.Arm
 {
     /// <summary>Capstone ARM Disassembler.</summary>
-    public sealed class CapstoneArmDisassembler : CapstoneDisassembler<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail>
+    public sealed class CapstoneArmDisassembler : Disassembler<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail>
     {
         /// <summary>Create a Capstone ARM Disassembler.</summary>
         /// <param name="mode">The disassembler's mode.</param>
-        public CapstoneArmDisassembler(DisassembleMode mode)
-            : base(DisassembleArchitecture.Arm, mode)
+        public CapstoneArmDisassembler(SupportedMode mode)
+            : base(SupportedArchitecture.Arm, mode)
         {
             return;
+        }
+
+        protected override Instruction<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> CreateInstruction(System.IntPtr nativeInstruction)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -20,7 +25,7 @@
         /// <returns>
         ///     A dissembled instruction.
         /// </returns>
-        protected override Instruction<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> CreateInstruction(NativeInstruction nativeInstruction) {
+        protected override Instruction<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> CreateInstruction(InstructionBase nativeInstruction) {
             var @object = nativeInstruction.AsArmInstruction();
 
             // Get Native Instruction's Managed Independent Detail.

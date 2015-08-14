@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace CSCapstone {
     /// <summary>
-    ///     Native Architecture Independent Instruction Detail.
+    ///     Native SupportedArchitecture Independent Instruction Detail.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct NativeIndependentInstructionDetail {

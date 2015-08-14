@@ -6,7 +6,7 @@ using CSCapstone.X86;
 
 namespace CSCapstone {
     /// <summary>
-    ///     Native Architecture Independent Instruction Detail Extension.
+    ///     Native SupportedArchitecture Independent Instruction Detail Extension.
     /// </summary>
     public static class NativeIndependentInstructionDetailExtension {
         /// <summary>
@@ -18,8 +18,8 @@ namespace CSCapstone {
         /// <returns>
         ///     An independent instruction detail.
         /// </returns>
-        public static IndependentInstructionDetail<ArmRegister, ArmInstructionGroup> AsArmIndependentInstructionDetail(this NativeIndependentInstructionDetail @this) {
-            var @object = new IndependentInstructionDetail<ArmRegister, ArmInstructionGroup>();
+        public static InstructionDetailBase<ArmRegister, ArmInstructionGroup> AsArmIndependentInstructionDetail(this NativeIndependentInstructionDetail @this) {
+            var @object = new InstructionDetailBase<ArmRegister, ArmInstructionGroup>();
             @object.Groups = @this.ManagedGroups
                 .Select(m => (ArmInstructionGroup) Convert.ToInt32(m))
                 .ToArray();
@@ -36,7 +36,7 @@ namespace CSCapstone {
         }
 
         /// <summary>
-        ///     Convert a Native Architecture Independent Instruction Detail to an ARM64 Independent Instruction Detail.
+        ///     Convert a Native SupportedArchitecture Independent Instruction Detail to an ARM64 Independent Instruction Detail.
         /// </summary>
         /// <param name="this">
         ///     A native architecture independent instruction detail.
@@ -44,8 +44,8 @@ namespace CSCapstone {
         /// <returns>
         ///     An independent instruction detail.
         /// </returns>
-        public static IndependentInstructionDetail<Arm64Register, Arm64InstructionGroup> AsArm64IndependentInstructionDetail(this NativeIndependentInstructionDetail @this) {
-            var @object = new IndependentInstructionDetail<Arm64Register, Arm64InstructionGroup>();
+        public static InstructionDetailBase<Arm64Register, Arm64InstructionGroup> AsArm64IndependentInstructionDetail(this NativeIndependentInstructionDetail @this) {
+            var @object = new InstructionDetailBase<Arm64Register, Arm64InstructionGroup>();
             @object.Groups = @this.ManagedGroups
                 .Select(m => (Arm64InstructionGroup) Convert.ToInt32(m))
                 .ToArray();
@@ -62,7 +62,7 @@ namespace CSCapstone {
         }
 
         /// <summary>
-        ///     Convert a Native Architecture Independent Instruction Detail to an X86 Independent Instruction Detail.
+        ///     Convert a Native SupportedArchitecture Independent Instruction Detail to an X86 Independent Instruction Detail.
         /// </summary>
         /// <param name="this">
         ///     A native architecture independent instruction detail.
@@ -70,8 +70,8 @@ namespace CSCapstone {
         /// <returns>
         ///     An independent instruction detail.
         /// </returns>
-        public static IndependentInstructionDetail<X86Register, X86InstructionGroup> AsX86IndependentInstructionDetail(this NativeIndependentInstructionDetail @this) {
-            var @object = new IndependentInstructionDetail<X86Register, X86InstructionGroup>();
+        public static InstructionDetailBase<X86Register, X86InstructionGroup> AsX86IndependentInstructionDetail(this NativeIndependentInstructionDetail @this) {
+            var @object = new InstructionDetailBase<X86Register, X86InstructionGroup>();
             @object.Groups = @this.ManagedGroups
                 .Select(m => (X86InstructionGroup) Convert.ToInt32(m))
                 .ToArray();

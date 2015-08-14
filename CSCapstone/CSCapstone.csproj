@@ -107,20 +107,15 @@
     <Compile Include="Arm\NativeArmInstructionMemoryOperandValueExtension.cs" />
     <Compile Include="Arm\NativeArmInstructionOperandExtension.cs" />
     <Compile Include="Arm\NativeArmShifterExtension.cs" />
-    <Compile Include="CapstoneDisassembler.cs" />
+    <Compile Include="Disassembler.cs" />
     <Compile Include="CapstoneImport.cs" />
     <Compile Include="CapstoneProxyImport.cs" />
-    <Compile Include="DisassembleArchitecture.cs" />
     <Compile Include="CapstoneErrorCode.cs" />
-    <Compile Include="DisassembleMode.cs" />
-    <Compile Include="DisassembleOptionType.cs" />
-    <Compile Include="DisassembleOptionValue.cs" />
-    <Compile Include="DisassembleSyntaxOptionValue.cs" />
+    <Compile Include="DisassemblerBase.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IndependentInstructionGroup.cs" />
     <Compile Include="Instruction.cs" />
     <Compile Include="MarshalExtension.cs" />
-    <Compile Include="NativeArchitectureInstructionDetail.cs" />
     <Compile Include="Arm64\NativeArm64InstructionDetail.cs" />
     <Compile Include="Arm64\NativeArm64InstructionMemoryOperandValue.cs" />
     <Compile Include="Arm64\NativeArm64InstructionOperand.cs" />
@@ -132,10 +127,8 @@
     <Compile Include="Arm\NativeArmShifter.cs" />
     <Compile Include="Arm\NativeArmInstructionOperandValue.cs" />
     <Compile Include="NativeIndependentInstructionDetailExtension.cs" />
-    <Compile Include="NativeInstruction.cs" />
+    <Compile Include="InstructionBase.cs" />
     <Compile Include="NativeIndependentInstructionDetail.cs" />
-    <Compile Include="NativeInstructionCollection.cs" />
-    <Compile Include="NativeInstructionCollectionEnumerator.cs" />
     <Compile Include="NativeInstructionExtension.cs" />
     <Compile Include="Mips\NativeMipsInstructionDetail.cs" />
     <Compile Include="Mips\NativeMipsInstructionMemoryOperandValue.cs" />
@@ -155,7 +148,7 @@
     <Compile Include="SystemZ\NativeSystemZInstructionMemoryOperandValue.cs" />
     <Compile Include="SystemZ\NativeSystemZInstructionOperand.cs" />
     <Compile Include="SystemZ\NativeSystemZInstructionOperandValue.cs" />
-    <Compile Include="X86\CapstoneX86Disassembler.cs" />
+    <Compile Include="X86\X86Disassembler.cs" />
     <Compile Include="X86\NativeX86InstructionDetail.cs" />
     <Compile Include="X86\NativeX86InstructionDetailExtension.cs" />
     <Compile Include="X86\NativeX86InstructionMemoryOperandValue.cs" />
@@ -182,7 +175,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafeCapstoneHandle.cs" />
     <Compile Include="SafeNativeInstructionHandle.cs" />
-    <Compile Include="IndependentInstructionDetail.cs" />
+    <Compile Include="InstructionDetailBase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

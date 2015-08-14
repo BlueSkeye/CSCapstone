@@ -2,7 +2,7 @@
 
 namespace CSCapstone {
     /// <summary>
-    ///     Architecture Independent Instruction Group.
+    ///     SupportedArchitecture Independent Instruction Group.
     /// </summary>
     public enum IndependentInstructionGroup {
         /// <summary>

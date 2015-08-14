@@ -6,12 +6,29 @@ using CSCapstone.X86;
 
 namespace CSCapstone
 {
-    /// <summary>Native Instruction.</summary>
+    /// <summary>This class handles the architecture agnostic part of an instruction
+    /// as returned by Capstone. This class is further extended by the templated
+    /// class Instruction that is architecture specifi..</summary>
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct NativeInstruction
+    public abstract class InstructionBase
     {
-        public ulong Address { get; set; }
-        public uint InstructionId { get; set; }
+        protected InstructionBase(DisassemblerBase owner, IntPtr from, ref int offset)
+        {
+            if (null == owner) { throw new ArgumentNullException(); }
+            _owner = owner;
+            InstructionId = Helpers.GetNativeUInt32(from, ref offset);
+            Address = Helpers.GetNativeUInt64(from, ref offset);
+            ManagedBytes = Helpers.GetNativeInlineBufferArray(from, 16,
+                Helpers.GetNativeUInt16(from, ref offset), ref offset);
+            Mnemonic = Helpers.GetAnsiString(from, 32, ref offset);
+            Operand = Helpers.GetAnsiString(from, 160, ref offset);
+            return;
+        }
+
+        public ulong Address { get; private set; }
+        
+        public uint InstructionId { get; private set; }
+        
         /// <summary>Get Instruction's Managed Machine Bytes.</summary>
         /// <value>Convenient property to retrieve the instruction's machine bytes
         /// as a managed collection. The codeSize of the managed collection will always
@@ -20,6 +37,7 @@ namespace CSCapstone
         /// uses direct memory copying tocopy the collection from unmanaged memory
         /// to managed memory every time it is invoked.</value>
         public byte[] ManagedBytes { get; private set; }
+        
         /// <summary>Get Instruction's Managed Mnemonic Text.</summary>
         /// <value>Convenient property to retrieve the instruction's mnemonic ASCII
         /// text as a managed string. This property allocates managed memory for a
@@ -30,7 +48,8 @@ namespace CSCapstone
         /// unmanaged string is too large to allocate in managed memory.</exception>
         /// <exception cref="System.AccessViolationException">Thrown if the unmanaged
         /// string is inaccessible.</exception>
-        public string ManagedMnemonic { get; private set; }
+        public string Mnemonic { get; private set; }
+
         /// <summary>Get Instruction's Managed Operand Text.</summary>
         /// <value>Convenient property to retrieve the instruction's operand ASCII
         /// text as a managed string. This property allocates managed memory for a
@@ -41,10 +60,16 @@ namespace CSCapstone
         /// unmanaged string is too large to allocate in managed memory.</exception>
         /// <exception cref="System.AccessViolationException">Thrown if the unmanaged
         /// string is inaccessible.</exception>
-        public string ManagedOperand { get; private set; }
+        public string Operand { get; private set; }
+        
         // public ushort Size { get; set; }
 
-        /// <summary>Get Instruction's Managed Architecture Independent Detail.</summary>
+        public bool BelongsToGroup(uint groupId)
+        {
+            return _owner.BelongsToGroup(this, groupId);
+        }
+
+        /// <summary>Get Instruction's Managed SupportedArchitecture Independent Detail.</summary>
         /// <value>Convenient property to retrieve the instruction's architecture
         /// independent detail as a managed structure. This property allocates managed
         /// memory for a new managed structure every time it is invoked. If <c>
@@ -95,20 +120,14 @@ namespace CSCapstone
         /// the given native buffer.</summary>
         /// <param name="from">Native data to be decoded.</param>
         /// <returns>An instance of this class.</returns>
-        internal static NativeInstruction Create<Inst, Reg, Group, Detail>(
-            CapstoneDisassembler<Inst, Reg, Group, Detail> onBehalfOf, IntPtr from)
+        internal static InstructionBase Create<Inst, Reg, Group, Detail>(
+            Disassembler<Inst, Reg, Group, Detail> onBehalfOf, IntPtr from)
         {
             int offset = 0;
             // WARNING : Do not change properties initialization order. They match
             // the native structure field order. Order of parameters in some Helpers
             // functions is also very sensitive.
-            NativeInstruction result = new NativeInstruction() {
-                InstructionId = Helpers.GetNativeUInt32(from, ref offset),
-                Address = Helpers.GetNativeUInt64(from, ref offset),
-                ManagedBytes = Helpers.GetNativeInlineBufferArray(from, 16, Helpers.GetNativeUInt16(from, ref offset), ref offset),
-                ManagedMnemonic = Helpers.GetAnsiString(from, 32, ref offset),
-                ManagedOperand = Helpers.GetAnsiString(from, 160, ref offset),
-            };
+            InstructionBase result = new Instruction<Inst, Reg, Group, Detail>(onBehalfOf, from, ref offset);
             IntPtr nativeDetails = Helpers.GetNativeIntPtr(from, ref offset);
             // TODO : Handle details.
             return result;
@@ -117,7 +136,7 @@ namespace CSCapstone
         /// <summary>Get Object's String Representation.</summary>
         /// <returns>The object's string representation.</returns>
         public override string ToString() {
-            return String.Format("{0} {1}", this.ManagedMnemonic, this.ManagedOperand);
+            return String.Format("{0} {1}", this.Mnemonic, this.Operand);
         }
     
         /// <summary>Instruction ID (basically a numeric ID for the instruction mnemonic)
@@ -150,5 +169,7 @@ namespace CSCapstone
         /// NOTE 2: when in Skipdata mode, or when detail mode is OFF, even if this
         /// pointer is not NULL, its content is still irrelevant.</summary>
         public IntPtr /* cs_detail * */ IndependentDetail;
+
+        private DisassemblerBase _owner;
     }
 }
