@@ -140,8 +140,9 @@ namespace CSCapstone {
         /// <param name="instructionCount">A platform specific integer representing
         /// the number of disassembled instructions.</param>
         [DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "cs_free")]
+        [System.Security.SuppressUnmanagedCodeSecurity()]
         internal static extern void Free(
-            [In] SafeNativeInstructionHandle pInstructions,
+            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeNativeInstructionHandle.Marshaler), MarshalCookie = SafeNativeInstructionHandle.Marshaler.FreeMarshalerCookie)] SafeNativeInstructionHandle instructions,
             [In] IntPtr instructionCount);
 
         /// <summary>Return a string describing given error code.</summary>

@@ -190,14 +190,16 @@ namespace CSCapstone {
             int totalSize = 0;
             IntPtr nativeCode = IntPtr.Zero;
             try {
+                IntPtr nativeInstruction = IntPtr.Zero;
                 using (SafeNativeInstructionHandle hInstruction = CapstoneImport.AllocateInstruction(this)) {
-                    IntPtr nativeInstruction = hInstruction.DangerousGetHandle();
+                    nativeInstruction = hInstruction.DangerousGetHandle();
                     // Transfer the managed byte array into a native buffer.
                     nativeCode = Marshal.AllocCoTaskMem(code.Length);
                     Marshal.Copy(code, 0, nativeCode, code.Length);
                     IntPtr remainingSize = (IntPtr)code.Length;
 
                     do {
+                        if (hInstruction.IsClosed) { throw new ApplicationException(); }
                         ulong instructionStartAddress = address;
                         shouldContinue |= CapstoneImport.DisassembleIteratively(this,
                             ref nativeCode, ref remainingSize, ref address, hInstruction);
@@ -209,6 +211,8 @@ namespace CSCapstone {
                         }
                     } while (shouldContinue && (0 < (long)remainingSize));
                     // TODO : Consider releasing nativeInstruction handle.
+                    if (hInstruction.IsClosed) { throw new ApplicationException(); }
+                    hInstruction.Dispose();
                 }
             }
             finally {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
 
 namespace CSCapstone {
@@ -16,10 +17,11 @@ namespace CSCapstone {
         public SafeNativeInstructionHandle()
             : base(true)
         {
+            this._instructionCount = (IntPtr)1;
             return;
         }
 
-        protected SafeNativeInstructionHandle(IntPtr handle)
+        internal SafeNativeInstructionHandle(IntPtr handle)
             : base(handle)
         {
             return;
@@ -32,7 +34,8 @@ namespace CSCapstone {
         /// unmanaged memory.</param>
         /// <param name="instructionCount">A platform specific integer representing
         /// the number of disassembled instructions in unmanaged memory.</param>
-        public SafeNativeInstructionHandle(IEnumerable<NativeInstruction> instructions, IntPtr pInstructions, IntPtr instructionCount)
+        public SafeNativeInstructionHandle(IEnumerable<NativeInstruction> instructions,
+            IntPtr pInstructions, IntPtr instructionCount)
             : base(true)
         {
             this._instructions = instructions;
@@ -70,7 +73,13 @@ namespace CSCapstone {
         /// otherwise.</returns>
         protected override bool ReleaseHandle()
         {
-            CapstoneImport.Free(this, this._instructionCount);
+            lock (ReleaseLock) {
+                try {
+                    _beingFreed = this;
+                    CapstoneImport.Free(this, this._instructionCount);
+                }
+                finally { _beingFreed = null; }
+            }
             this._instructions = Enumerable.Empty<NativeInstruction>();
             return true;
         }
@@ -79,5 +88,60 @@ namespace CSCapstone {
         private readonly IntPtr _instructionCount;
         /// <summary>Instructions.</summary>
         private IEnumerable<NativeInstruction> _instructions;
+        private static readonly object ReleaseLock = new object();
+        private static SafeNativeInstructionHandle _beingFreed;
+
+        internal class Marshaler : ICustomMarshaler
+        {
+            private Marshaler(bool enforceFreingLock)
+            {
+                _enforecFreeingLock = enforceFreingLock;
+            }
+
+            public void CleanUpManagedData(object ManagedObj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void CleanUpNativeData(IntPtr pNativeData)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static ICustomMarshaler GetInstance(string cookie)
+            {
+                if (FreeMarshalerCookie == cookie) {
+                    return _freeMarshalerSingleton;
+                }
+                throw new ArgumentException();
+            }
+
+            public int GetNativeDataSize()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IntPtr MarshalManagedToNative(object ManagedObj)
+            {
+                SafeNativeInstructionHandle instructionHandle = (SafeNativeInstructionHandle)ManagedObj;
+                if (null == instructionHandle) { return IntPtr.Zero; }
+                
+                if (_enforecFreeingLock) {
+                    if (SafeNativeInstructionHandle._beingFreed != instructionHandle) {
+                        throw new InvalidOperationException();
+                    }
+                }
+                return instructionHandle.handle;
+            }
+
+            public object MarshalNativeToManaged(IntPtr pNativeData)
+            {
+                throw new NotImplementedException();
+            }
+
+            private static readonly Marshaler _freeMarshalerSingleton = new Marshaler(true);
+            internal const string FreeMarshalerCookie = "FREE";
+            private bool _enforecFreeingLock;
+        }
     }
 }
