@@ -1,11 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.X86 {
-    /// <summary>X86 Instruction.fs</summary>
-    public enum X86Instruction {
-        /// <summary>
-        ///     Invalid X86 Instruction.
-        /// </summary>
+﻿namespace CSCapstone.X86 {
+    /// <summary>X86 Instruction.</summary>
+    public enum X86Mnemonic {
+        /// <summary>Invalid X86 Instruction.</summary>
         Invalid = 0,
 
         AAA,

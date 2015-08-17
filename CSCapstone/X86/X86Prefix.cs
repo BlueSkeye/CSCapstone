@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.X86 {
-    /// <summary>
-    ///     X86 Prefix.
-    /// </summary>
+﻿namespace CSCapstone.X86 {
+    /// <summary>X86 Prefix.</summary>
     public enum X86Prefix {
-        /// <summary>
-        ///     Irrelevant Prefix.
-        /// </summary>
+        /// <summary>Irrelevant Prefix.</summary>
         Irrelevant = 0,
 
         // Note.

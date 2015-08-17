@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.X86 {
-    /// <summary>
-    ///     X86 AVX Code Condition.
-    /// </summary>
+﻿namespace CSCapstone.X86 {
+    /// <summary>X86 AVX Code Condition.</summary>
     public enum X86AvxCodeCondition {
-        /// <summary>
-        ///     Invalid AVX Code Condition.
-        /// </summary>
+        /// <summary>Invalid AVX Code Condition.</summary>
         Invalid = 0,
 
         EQ,

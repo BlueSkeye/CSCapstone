@@ -18,14 +18,56 @@ namespace CSCapstone
 
         internal static string GetAnsiString(IntPtr baseAddress, uint inlineSize, ref int offset)
         {
-            try { return Marshal.PtrToStringAnsi(baseAddress + offset, (int)inlineSize).TrimEnd('\0'); }
+            try { return Marshal.PtrToStringAnsi(baseAddress + offset, (int)inlineSize).TrimGarbageAtEnd(); }
             finally { offset += (int)inlineSize; }
+        }
+
+        internal static bool GetBoolean(IntPtr baseAddress, ref int offset)
+        {
+            try { return (0 != Marshal.ReadByte(baseAddress, offset)); }
+            finally { offset += 1; }
+        }
+
+        internal static T[] GetByteEnum<T>(IntPtr baseAddress, ref int offset, int count)
+        {
+            T[] result = new T[count];
+            for(int index = 0; index < count; index++) {
+                result[index] = GetByteEnum<T>(baseAddress, ref offset);
+            }
+            return result;
+        }
+
+        internal static T GetByteEnum<T>(IntPtr baseAddress, ref int offset)
+        {
+            return (T)((IConvertible)Helpers.GetNativeByte(baseAddress, ref offset)).ToType(typeof(T), null);
+        }
+
+        internal static byte[] GetBytes(IntPtr baseAddress, ref int offset, int count)
+        {
+            byte[] result = new byte[count];
+            Marshal.Copy(baseAddress + offset, result, 0, count);
+            offset += count;
+            return result;
+        }
+
+        internal static T GetEnum<T>(IntPtr baseAddress, ref int offset)
+        {
+            return (T)((IConvertible)Helpers.GetNativeInt32(baseAddress, ref offset)).ToType(typeof(T), null);
         }
 
         internal static byte GetNativeByte(IntPtr baseAddress, ref int offset)
         {
             try { return Marshal.ReadByte(baseAddress, offset); }
             finally { offset += 1; }
+        }
+
+        internal static double GetNativeDouble(IntPtr baseAddress, ref int offset)
+        {
+            try {
+                Align(sizeof(double), ref offset);
+                return (double)(Marshal.PtrToStructure(baseAddress, typeof(double)));
+            }
+            finally { offset += sizeof(double); }
         }
 
         internal static byte[] GetNativeInlineBufferArray(IntPtr baseAddress, uint inlineSize,
@@ -44,6 +86,18 @@ namespace CSCapstone
             finally { offset += IntPtr.Size; }
         }
 
+        internal static int GetNativeInt32(IntPtr baseAddress, ref int offset)
+        {
+            try { return Marshal.ReadInt32(baseAddress, Align(sizeof(int), ref offset)); }
+            finally { offset += sizeof(int); }
+        }
+
+        internal static long GetNativeInt64(IntPtr baseAddress, ref int offset)
+        {
+            try { return Marshal.ReadInt64(baseAddress, Align(sizeof(long), ref offset)); }
+            finally { offset += sizeof(long); }
+        }
+
         internal static ushort GetNativeUInt16(IntPtr baseAddress, ref int offset)
         {
             try { return (ushort)Marshal.ReadInt16(baseAddress, Align(sizeof(ushort), ref offset)); }
@@ -60,6 +114,19 @@ namespace CSCapstone
         {
             try { return (ulong)Marshal.ReadInt64(baseAddress, Align(sizeof(ulong), ref offset)); }
             finally { offset += sizeof(ulong); }
+        }
+
+        internal static string TrimGarbageAtEnd(this string from)
+        {
+            int index = from.IndexOf('\0');
+            switch (index) {
+                case -1:
+                    return from;
+                case 0:
+                    return string.Empty;
+                default:
+                    return from.Substring(0, index);
+            }
         }
 
         /// <summary>Interpret the native Capstone error code and throw an

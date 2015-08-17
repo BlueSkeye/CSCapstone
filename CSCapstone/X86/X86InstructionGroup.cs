@@ -1,9 +1,5 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.X86 {
-    /// <summary>
-    ///     X86 Instruction Group.
-    /// </summary>
+﻿namespace CSCapstone.X86 {
+    /// <summary>X86 Instruction Group.</summary>
     public enum X86InstructionGroup {
         /// <summary>
         ///     Invalid Instruction Group.

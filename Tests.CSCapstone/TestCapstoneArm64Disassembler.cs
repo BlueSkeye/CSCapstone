@@ -11,7 +11,7 @@ namespace Tests.CSCapstone {
         /// <summary>Test Create.</summary>
         [Test]
         public void TestCreate() {
-            var disassembler = new CapstoneArm64Disassembler(DisassemblerBase.SupportedMode.Arm32);
+            var disassembler = new Arm64Disassembler(DisassemblerBase.SupportedMode.Arm32);
             Assert.IsNotNull(disassembler);
             Assert.AreEqual(disassembler.Architecture, DisassemblerBase.SupportedArchitecture.Arm64);
             Assert.AreEqual(disassembler.EnableDetails, false);
@@ -25,7 +25,7 @@ namespace Tests.CSCapstone {
             // Create X86 Disassembler.
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = new CapstoneArm64Disassembler(DisassemblerBase.SupportedMode.Arm32)) {
+            using (var disassembler = new Arm64Disassembler(DisassemblerBase.SupportedMode.Arm32)) {
                 Assert.IsNotNull(disassembler);
 
                 // Enable Disassemble Details.

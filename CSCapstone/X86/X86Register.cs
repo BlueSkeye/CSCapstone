@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.X86 {
-    /// <summary>
-    ///     X86 Register.
-    /// </summary>
+﻿namespace CSCapstone.X86 {
+    /// <summary>X86 Register.</summary>
     public enum X86Register {
-        /// <summary>
-        ///     Invalid Register.
-        /// </summary>
+        /// <summary>Invalid Register.</summary>
         Invalid = 0,
 
         AH,

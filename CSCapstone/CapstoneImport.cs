@@ -74,7 +74,7 @@ namespace CSCapstone {
         /// <param name="codeSize">A platform specific integer representing the number
         /// of instructions to disassemble.
         /// TODO : Instructions or buytes ?</param>
-        /// <param name="startingAddress">The address of the first instruction in
+        /// <param name="startingAddress">The nextAddress of the first instruction in
         /// the collection of bytes to disassemble.</param>
         /// <param name="count">A platform specific integer representing the number of
         /// instructions to disassemble. A <c>IntPtr.Zero</c> indicates all instructions
@@ -95,13 +95,13 @@ namespace CSCapstone {
             [Out] out IntPtr /* cs_insn * */ instruction);
 
         /// <summary>Fast API to disassemble binary code, given the code buffer, codeSize,
-        /// address and number of instructions to be decoded.
+        /// nextAddress and number of instructions to be decoded.
         /// This API put the resulted instruction into a given cache in @insn.</summary>
         /// <param name="pHandle">A <see cref="SafeCapstoneContextHandle"/> as retrieved
         /// by a call to <see cref="Open"/>.</param>
         /// <param name="code">buffer containing raw binary code to be disassembled</param>
         /// <param name="codeSize">codeSize of above code</param>
-        /// <param name="address">address of the first insn in given raw code buffer</param>
+        /// <param name="nextAddress">nextAddress of the first insn in given raw code buffer</param>
         /// <param name="insn">pointer to instruction to be filled in by this API.</param>
         /// <returns>true if this API successfully decode 1 instruction, or false
         /// otherwise.</returns>
@@ -109,7 +109,7 @@ namespace CSCapstone {
         /// TODO : This function is not used for now. Define a clean public method
         /// or set of methods in the Disassembler class.
         /// 
-        /// NOTE 1: this API will update @code, @codeSize & @address to point to
+        /// NOTE 1: this API will update @code, @codeSize & @nextAddress to point to
         /// the next instruction in the input buffer. Therefore, it is convenient to
         /// use cs_disasm_iter() inside a loop to quickly iterate all the instructions.
         /// While decoding one instruction at a time can also be achieved with

@@ -1,11 +1,7 @@
 ﻿namespace CSCapstone.X86 {
-    /// <summary>
-    ///     X86 AVX Broadcast.
-    /// </summary>
+    /// <summary>X86 AVX Broadcast.</summary>
     public enum X86AvxBroadcast {
-        /// <summary>
-        ///     Invalid AVX Broadcast.
-        /// </summary>
+        /// <summary>Invalid AVX Broadcast.</summary>
         Invalid = 0,
 
         Broadcast2,

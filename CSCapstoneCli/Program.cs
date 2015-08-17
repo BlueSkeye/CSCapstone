@@ -63,7 +63,7 @@ namespace CSCapstoneCli {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = new CapstoneArmDisassembler(mode)) {
+            using (var disassembler = new ArmDisassembler(mode)) {
                 // Enable Disassemble Details.
                 //
                 // Enables disassemble details, which are disabled by default, to provide more detailed information on
@@ -183,7 +183,7 @@ namespace CSCapstoneCli {
             //
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
-            using (var disassembler = new CapstoneArm64Disassembler(DisassemblerBase.SupportedMode.Arm32)) {
+            using (var disassembler = new Arm64Disassembler(DisassemblerBase.SupportedMode.Arm32)) {
                 // Enable Disassemble Details.
                 //
                 // Enables disassemble details, which are disabled by default, to provide more detailed information on
@@ -317,9 +317,11 @@ namespace CSCapstoneCli {
             return true;
         }
 
-        private static bool OnX86DisassembledInstruction(Instruction<X86Instruction, X86Register, X86InstructionGroup, X86InstructionDetail> instruction,
-            int size, ulong address)
+        private static bool OnX86DisassembledInstruction(Instruction<X86Mnemonic, X86Register, X86InstructionGroup, X86InstructionDetail> instruction,
+            int size, ulong nextAddress)
         {
+            Console.WriteLine("{0:X8} {1} {2}",
+                instruction.Address, instruction.Mnemonic, instruction.Operand);
             return true;
         }
 
@@ -375,17 +377,17 @@ namespace CSCapstoneCli {
                         foreach (var operand in instruction.ArchitectureDetail.Operands) {
                             string operandValue = null;
                             switch (operand.Type) {
-                                case X86InstructionOperandType.FloatingPoint:
-                                    operandValue = operand.FloatingPointValue.Value.ToString("X");
+                                case X86OperandType.FloatingPoint:
+                                    operandValue = ((X86FloatingPointOperand)operand).Value.ToString("X");
                                     break;
-                                case X86InstructionOperandType.Immediate:
-                                    operandValue = operand.ImmediateValue.Value.ToString("X");
+                                case X86OperandType.Immediate:
+                                    operandValue = ((X86ImmediateOperand)operand).Value.ToString("X");
                                     break;
-                                case X86InstructionOperandType.Memory:
+                                case X86OperandType.Memory:
                                     operandValue = "-->";
                                     break;
-                                case X86InstructionOperandType.Register:
-                                    operandValue = operand.RegisterValue.Value.ToString();
+                                case X86OperandType.Register:
+                                    operandValue = ((X86RegisterOperand)operand).Value.ToString();
                                     break;
                             }
 
@@ -394,12 +396,13 @@ namespace CSCapstoneCli {
                             // Handle Memory Operand.
                             //
                             // ...
-                            if (operand.Type == X86InstructionOperandType.Memory) {
-                                Console.WriteLine("\t\t\t Base Register = {0} ", operand.MemoryValue.BaseRegister);
-                                Console.WriteLine("\t\t\t Displacement = {0:X} ", operand.MemoryValue.Displacement);
-                                Console.WriteLine("\t\t\t Index Register = {0}", operand.MemoryValue.IndexRegister);
-                                Console.WriteLine("\t\t\t Index Register Scale = {0}", operand.MemoryValue.IndexRegisterScale);
-                                Console.WriteLine("\t\t\t Segment Register = {0}", operand.MemoryValue.SegmentRegister);
+                            if (operand.Type == X86OperandType.Memory) {
+                                X86MemoryOperand memoryOperand = (X86MemoryOperand)operand;
+                                Console.WriteLine("\t\t\t Base Register = {0} ", memoryOperand.BaseRegister);
+                                Console.WriteLine("\t\t\t Displacement = {0:X} ", memoryOperand.Displacement);
+                                Console.WriteLine("\t\t\t Index Register = {0}", memoryOperand.IndexRegister);
+                                Console.WriteLine("\t\t\t Index Register Scale = {0}", memoryOperand.IndexRegisterScale);
+                                Console.WriteLine("\t\t\t Segment Register = {0}", memoryOperand.SegmentRegister);
                                 Console.WriteLine();
                             }
 

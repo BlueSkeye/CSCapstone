@@ -81,7 +81,7 @@
     <Compile Include="Arm64\Arm64TlbiInstructionOperation.cs" />
     <Compile Include="Arm64\Arm64VectorArrangementSpecifier.cs" />
     <Compile Include="Arm64\Arm64VectorElementSizeSpecifier.cs" />
-    <Compile Include="Arm64\CapstoneArm64Disassembler.cs" />
+    <Compile Include="Arm64\Arm64Disassembler.cs" />
     <Compile Include="Arm64\NativeArm64InstructionDetailExtension.cs" />
     <Compile Include="Arm64\NativeArm64InstructionMemoryOperandValueExtension.cs" />
     <Compile Include="Arm64\NativeArm64InstructionOperandExtension.cs" />
@@ -102,7 +102,7 @@
     <Compile Include="Arm\ArmSetEndInstructionOperandType.cs" />
     <Compile Include="Arm\ArmSysRegister.cs" />
     <Compile Include="Arm\ArmVectorDataType.cs" />
-    <Compile Include="Arm\CapstoneArmDisassembler.cs" />
+    <Compile Include="Arm\ArmDisassembler.cs" />
     <Compile Include="Arm\NativeArmInstructionDetailExtension.cs" />
     <Compile Include="Arm\NativeArmInstructionMemoryOperandValueExtension.cs" />
     <Compile Include="Arm\NativeArmInstructionOperandExtension.cs" />
@@ -126,7 +126,6 @@
     <Compile Include="Arm\NativeArmInstructionOperand.cs" />
     <Compile Include="Arm\NativeArmShifter.cs" />
     <Compile Include="Arm\NativeArmInstructionOperandValue.cs" />
-    <Compile Include="NativeIndependentInstructionDetailExtension.cs" />
     <Compile Include="InstructionBase.cs" />
     <Compile Include="NativeIndependentInstructionDetail.cs" />
     <Compile Include="NativeInstructionExtension.cs" />
@@ -149,24 +148,20 @@
     <Compile Include="SystemZ\NativeSystemZInstructionOperand.cs" />
     <Compile Include="SystemZ\NativeSystemZInstructionOperandValue.cs" />
     <Compile Include="X86\X86Disassembler.cs" />
-    <Compile Include="X86\NativeX86InstructionDetail.cs" />
-    <Compile Include="X86\NativeX86InstructionDetailExtension.cs" />
-    <Compile Include="X86\NativeX86InstructionMemoryOperandValue.cs" />
-    <Compile Include="X86\NativeX86InstructionMemoryOperandValueExtension.cs" />
-    <Compile Include="X86\NativeX86InstructionOperand.cs" />
-    <Compile Include="X86\NativeX86InstructionOperandExtension.cs" />
-    <Compile Include="X86\NativeX86InstructionOperandValue.cs" />
     <Compile Include="X86\X86AvxBroadcast.cs" />
     <Compile Include="X86\X86AvxCodeCondition.cs" />
     <Compile Include="X86\X86AvxRoundingMode.cs" />
-    <Compile Include="X86\X86Instruction.cs" />
+    <Compile Include="X86\X86FloatingPointOperand.cs" />
+    <Compile Include="X86\X86ImmediateOperand.cs" />
+    <Compile Include="X86\X86Mnemonic.cs" />
     <Compile Include="X86\X86InstructionDetail.cs" />
     <Compile Include="X86\X86InstructionGroup.cs" />
-    <Compile Include="X86\X86InstructionMemoryOperandValue.cs" />
-    <Compile Include="X86\X86InstructionOperand.cs" />
-    <Compile Include="X86\X86InstructionOperandType.cs" />
+    <Compile Include="X86\X86MemoryOperand.cs" />
+    <Compile Include="X86\X86Operand.cs" />
+    <Compile Include="X86\X86OperandType.cs" />
     <Compile Include="X86\X86Prefix.cs" />
     <Compile Include="X86\X86Register.cs" />
+    <Compile Include="X86\X86RegisterOperand.cs" />
     <Compile Include="X86\X86SseCodeCondition.cs" />
     <Compile Include="XCore\NativeXCoreInstructionDetail.cs" />
     <Compile Include="XCore\NativeXCoreInstructionMemoryOperandValue.cs" />
@@ -175,7 +170,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafeCapstoneHandle.cs" />
     <Compile Include="SafeNativeInstructionHandle.cs" />
-    <Compile Include="InstructionDetailBase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

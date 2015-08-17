@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.X86 {
-    /// <summary>
-    ///     X86 SSE Code Condition.
-    /// </summary>
+﻿namespace CSCapstone.X86 {
+    /// <summary>X86 SSE Code Condition.</summary>
     public enum X86SSECodeCondition {
-        /// <summary>
-        ///     Invalid SSE Code Condition.
-        /// </summary>
+        /// <summary>Invalid SSE Code Condition.</summary>
         Invalid = 0,
 
         EQ,
