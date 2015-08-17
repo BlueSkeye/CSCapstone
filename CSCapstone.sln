@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCapstone", "CSCapstone\CSCapstone.csproj", "{1297DCEE-009D-4739-8124-3F064EA9EA10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.CSCapstone", "Tests.CSCapstone\Tests.CSCapstone.csproj", "{7D755424-C594-4605-820D-9AF880E091BC}"

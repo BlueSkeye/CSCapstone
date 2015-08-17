@@ -128,7 +128,6 @@
     <Compile Include="Arm\NativeArmInstructionOperandValue.cs" />
     <Compile Include="InstructionBase.cs" />
     <Compile Include="NativeIndependentInstructionDetail.cs" />
-    <Compile Include="NativeInstructionExtension.cs" />
     <Compile Include="Mips\NativeMipsInstructionDetail.cs" />
     <Compile Include="Mips\NativeMipsInstructionMemoryOperandValue.cs" />
     <Compile Include="Mips\NativeMipsInstructionOperand.cs" />
