@@ -3,15 +3,11 @@
 #pragma warning disable 1591
 
 namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM Memory Barrier.
-    /// </summary>
+    /// <summary>ARM Memory Barrier.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "IdentifierTypo")]
     public enum ArmMemoryBarrier {
-        /// <summary>
-        ///     Invalid Memory Barrier.
-        /// </summary>
+        /// <summary>Invalid Memory Barrier.</summary>
         Invalid = 0,
 
         RESERVED_0,

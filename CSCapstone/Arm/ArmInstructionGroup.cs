@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM Instruction Group.
-    /// </summary>
+﻿namespace CSCapstone.Arm {
+    /// <summary>ARM Instruction Group.</summary>
     public enum ArmInstructionGroup {
-        /// <summary>
-        ///     Invalid Instruction Group.
-        /// </summary>
+        /// <summary>Invalid Instruction Group.</summary>
         Invalid = 0,
 
         JUMP = IndependentInstructionGroup.JUMP,

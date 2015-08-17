@@ -4,16 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 #pragma warning disable 1591
 
 namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM SYS Register.
-    /// </summary>
+    /// <summary>ARM SYS Register.</summary>
     [Flags]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "IdentifierTypo")]
     public enum ArmSysRegister {
-        /// <summary>
-        ///     Invalid Register.
-        /// </summary>
+        /// <summary>Invalid Register.</summary>
         Invalid = 0,
 
         // Note.

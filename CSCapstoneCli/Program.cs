@@ -120,29 +120,25 @@ namespace CSCapstoneCli {
                         foreach (var operand in instruction.ArchitectureDetail.Operands) {
                             string operandValue = null;
                             switch (operand.Type) {
-                                case ArmInstructionOperandType.CImmediate:
-                                    operandValue = operand.ImmediateValue.Value.ToString("X");
+                                case ArmOperandType.CImmediate:
+                                case ArmOperandType.Immediate:
+                                case ArmOperandType.PImmediate:
+                                    operandValue = ((ArmImmediateOperand)operand).Value.ToString("X");
                                     break;
-                                case ArmInstructionOperandType.FloatingPoint:
-                                    operandValue = operand.FloatingPointValue.Value.ToString();
+                                case ArmOperandType.FloatingPoint:
+                                    operandValue = ((ArmFloatingPointOperand)operand).Value.ToString();
                                     break;
-                                case ArmInstructionOperandType.Immediate:
-                                    operandValue = operand.ImmediateValue.Value.ToString("X");
-                                    break;
-                                case ArmInstructionOperandType.PImmediate:
-                                    operandValue = operand.ImmediateValue.Value.ToString("X");
-                                    break;
-                                case ArmInstructionOperandType.Memory:
+                                case ArmOperandType.Memory:
                                     operandValue = "-->";
                                     break;
-                                case ArmInstructionOperandType.Register:
-                                    operandValue = operand.RegisterValue.Value.ToString();
+                                case ArmOperandType.Register:
+                                    operandValue = ((ArmRegisterOperand)operand).Value.ToString();
                                     break;
-                                case ArmInstructionOperandType.SetEnd:
-                                    operandValue = operand.SetEndValue.Value.ToString();
+                                case ArmOperandType.SetEnd:
+                                    operandValue = ((ArmSetEndOperand)operand).Value.ToString();
                                     break;
-                                case ArmInstructionOperandType.SysRegister:
-                                    operandValue = operand.SysRegisterValue.Value.ToString();
+                                case ArmOperandType.SysRegister:
+                                    operandValue = ((ArmSystemRegisterOperand)operand).Value.ToString();
                                     break;
                             }
 
@@ -151,11 +147,12 @@ namespace CSCapstoneCli {
                             // Handle Memory Operand.
                             //
                             // ...
-                            if (operand.Type == ArmInstructionOperandType.Memory) {
-                                Console.WriteLine("\t\t\t Base Register = {0} ", operand.MemoryValue.BaseRegister);
-                                Console.WriteLine("\t\t\t Displacement = {0:X} ", operand.MemoryValue.Displacement);
-                                Console.WriteLine("\t\t\t Index Register = {0} ", operand.MemoryValue.IndexRegister);
-                                Console.WriteLine("\t\t\t Index Register Scale = {0} ", operand.MemoryValue.IndexRegisterScale);
+                            if (operand.Type == ArmOperandType.Memory) {
+                                ArmMemoryOperand memoryOperand = (ArmMemoryOperand)operand;
+                                Console.WriteLine("\t\t\t Base Register = {0} ", memoryOperand.BaseRegister);
+                                Console.WriteLine("\t\t\t Displacement = {0:X} ", memoryOperand.Displacement);
+                                Console.WriteLine("\t\t\t Index Register = {0} ", memoryOperand.IndexRegister);
+                                Console.WriteLine("\t\t\t Index Register Scale = {0} ", memoryOperand.IndexRegisterScale);
                                 Console.WriteLine();
                             }
 

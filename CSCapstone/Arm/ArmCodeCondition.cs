@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM Code Condition.
-    /// </summary>
+﻿namespace CSCapstone.Arm {
+    /// <summary>ARM Code Condition.</summary>
     public enum ArmCodeCondition {
-        /// <summary>
-        ///     Invalid Code Condition.
-        /// </summary>
+        /// <summary>Invalid Code Condition.</summary>
         Invalid = 0,
 
         EQ,

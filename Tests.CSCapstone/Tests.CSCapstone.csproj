@@ -66,7 +66,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSCapstone\CSCapstone-AHEAD.csproj">
+    <ProjectReference Include="..\CSCapstone\CSCapstone.csproj">
       <Project>{1297dcee-009d-4739-8124-3f064ea9ea10}</Project>
       <Name>CSCapstone-AHEAD</Name>
     </ProjectReference>

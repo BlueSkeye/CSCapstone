@@ -42,7 +42,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSCapstone\CSCapstone-AHEAD.csproj">
+    <ProjectReference Include="..\CSCapstone\CSCapstone.csproj">
       <Project>{1297DCEE-009D-4739-8124-3F064EA9EA10}</Project>
       <Name>CSCapstone-AHEAD</Name>
     </ProjectReference>

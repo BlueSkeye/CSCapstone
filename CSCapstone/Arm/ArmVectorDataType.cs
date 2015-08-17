@@ -1,13 +1,9 @@
 ﻿#pragma warning disable 1591
 
 namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM Vector Data Type.
-    /// </summary>
+    /// <summary>ARM Vector Data Type.</summary>
     public enum ArmVectorDataType {
-        /// <summary>
-        ///     Invalid Data Type.
-        /// </summary>
+        /// <summary>Invalid Data Type.</summary>
         Invalid = 0,
 
         I8,

@@ -3,15 +3,11 @@
 #pragma warning disable 1591
 
 namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM Instruction.
-    /// </summary>
+    /// <summary>ARM Instruction.</summary>
     [SuppressMessage("ReSharper", "IdentifierTypo")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum ArmInstruction {
-        /// <summary>
-        ///     Invalid ARM Instruction.
-        /// </summary>
+        /// <summary>Invalid ARM Instruction.</summary>
         Invalid = 0,
 
         ADC,

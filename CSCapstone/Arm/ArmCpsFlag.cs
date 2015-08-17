@@ -3,14 +3,10 @@
 // ReSharper disable InconsistentNaming
 
 namespace CSCapstone.Arm {
-    /// <summary>
-    ///     ARM CPS Flag.
-    /// </summary>
+    /// <summary>ARM CPS Flag.</summary>
     [Flags]
     public enum ArmCpsFlag {
-        /// <summary>
-        ///     Invalid CPS Flag.
-        /// </summary>
+        /// <summary>Invalid CPS Flag.</summary>
         Invalid = 0,
 
         F = 1,

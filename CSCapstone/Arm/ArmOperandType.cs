@@ -4,7 +4,7 @@ namespace CSCapstone.Arm {
     /// <summary>
     ///     ARM Instruction Operand Type.
     /// </summary>
-    public enum ArmInstructionOperandType {
+    public enum ArmOperandType {
         /// <summary>
         ///     Invalid Instruction Operand Type.
         /// </summary>
