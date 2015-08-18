@@ -192,13 +192,19 @@
     <Compile Include="X86\X86Register.cs" />
     <Compile Include="X86\X86RegisterOperand.cs" />
     <Compile Include="X86\X86SseCodeCondition.cs" />
-    <Compile Include="XCore\NativeXCoreInstructionDetail.cs" />
-    <Compile Include="XCore\NativeXCoreInstructionMemoryOperandValue.cs" />
-    <Compile Include="XCore\NativeXCoreInstructionOperand.cs" />
-    <Compile Include="XCore\NativeXCoreInstructionOperandValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafeCapstoneHandle.cs" />
     <Compile Include="SafeNativeInstructionHandle.cs" />
+    <Compile Include="XCore\XCoreDisassembler.cs" />
+    <Compile Include="XCore\XCoreImmediateOperand.cs" />
+    <Compile Include="XCore\XCoreInstructionDetail.cs" />
+    <Compile Include="XCore\XCoreInstructionGroup.cs" />
+    <Compile Include="XCore\XCoreMemoryOperand.cs" />
+    <Compile Include="XCore\XCoreMnemonic.cs" />
+    <Compile Include="XCore\XCoreOperand.cs" />
+    <Compile Include="XCore\XCoreOperandType.cs" />
+    <Compile Include="XCore\XCoreRegister.cs" />
+    <Compile Include="XCore\XCoreRegisterOperand.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
