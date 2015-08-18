@@ -52,13 +52,13 @@ namespace CSCapstone.X86 {
         /// <summary>Get Instruction's Displacement Value.</summary>
         public int Displacement { get; private set; }
 
-        /// <summary>Get Instruction's SIB Index Register.</summary>
+        /// <summary>Get Instruction's SIB IndexRegister Register.</summary>
         public X86Register SibIndexRegister { get; private set; }
 
         /// <summary>Instruction's SIB Scale.</summary>
         public byte SibScale { get; private set; }
 
-        /// <summary>Get Instruction's SIB Base Register.</summary>
+        /// <summary>Get Instruction's SIB BaseRegister Register.</summary>
         public X86Register SibBaseRegister { get; private set; }
 
         /// <summary>Get Instruction's SSE Code Condition.</summary>

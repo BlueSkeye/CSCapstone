@@ -1,9 +1,5 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.Arm64 {
-    /// <summary>
-    ///     ARM64 MSR Register.
-    /// </summary>
+﻿namespace CSCapstone.Arm64 {
+    /// <summary>ARM64 MSR Register.</summary>
     public enum Arm64MsrRegister {
         DBGDTRTX_EL0 = 0x9828,
         OSLAR_EL1 = 0x8084,

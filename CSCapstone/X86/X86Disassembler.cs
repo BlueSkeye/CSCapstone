@@ -13,7 +13,9 @@ namespace CSCapstone.X86
             return;
         }
 
-        internal override X86InstructionDetail CreateDetail(IntPtr from, ref int offset)
+        internal override X86InstructionDetail CreateDetail(
+            Instruction<X86Mnemonic, X86Register, X86InstructionGroup, X86InstructionDetail> instruction,
+            IntPtr from, ref int offset)
         {
             return new X86InstructionDetail(from, ref offset);
         }

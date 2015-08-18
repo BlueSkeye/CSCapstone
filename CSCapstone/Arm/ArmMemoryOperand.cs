@@ -14,13 +14,13 @@ namespace CSCapstone.Arm
             return;
         }
 
-        /// <summary>Operand Value's Base Register.</summary>
+        /// <summary>Operand Value's BaseRegister Register.</summary>
         public uint BaseRegister { get; private set; }
 
-        /// <summary>Operand Value's Index Register.</summary>
+        /// <summary>Operand Value's IndexRegister Register.</summary>
         public uint IndexRegister { get; private set; }
 
-        /// <summary>Operand Value's Index Register Scale.</summary>
+        /// <summary>Operand Value's IndexRegister Register Scale.</summary>
         public int IndexRegisterScale { get; private set; }
 
         /// <summary>Operand Value's Displacement Value.</summary>

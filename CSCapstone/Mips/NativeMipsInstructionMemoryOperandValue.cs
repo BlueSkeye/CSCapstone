@@ -7,7 +7,7 @@ namespace CSCapstone.Mips {
     [StructLayout(LayoutKind.Sequential)]
     public struct NativeMipsInstructionMemoryOperandValue {
         /// <summary>
-        ///     Operand Value's Base Register.
+        ///     Operand Value's BaseRegister Register.
         /// </summary>
         public uint BaseRegister;
 

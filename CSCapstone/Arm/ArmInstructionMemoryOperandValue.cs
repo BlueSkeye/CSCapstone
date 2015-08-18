@@ -4,7 +4,7 @@
     /// </summary>
     public sealed class ArmInstructionMemoryOperandValue {
         /// <summary>
-        ///     Get Operand Value's Base Register.
+        ///     Get Operand Value's BaseRegister Register.
         /// </summary>
         public ArmRegister BaseRegister { get; internal set; }
 
@@ -14,12 +14,12 @@
         public int Displacement { get; internal set; }
 
         /// <summary>
-        ///     Get Operand Value's Index Register.
+        ///     Get Operand Value's IndexRegister Register.
         /// </summary>
         public ArmRegister IndexRegister { get; internal set; }
 
         /// <summary>
-        ///     Get Operand Value's Index Register Scale.
+        ///     Get Operand Value's IndexRegister Register Scale.
         /// </summary>
         public int IndexRegisterScale { get; internal set; }
 

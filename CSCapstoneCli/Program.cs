@@ -218,37 +218,35 @@ namespace CSCapstoneCli {
                         foreach (var operand in instruction.ArchitectureDetail.Operands) {
                             string operandValue = null;
                             switch (operand.Type) {
-                                case Arm64InstructionOperandType.CImmediate:
-                                    operandValue = operand.ImmediateValue.Value.ToString("X");
+                                case Arm64OperandType.CImmediate:
+                                case Arm64OperandType.Immediate:
+                                    operandValue = ((Arm64ImmediateOperand)operand).Value.ToString("X");
                                     break;
-                                case Arm64InstructionOperandType.FloatingPoint:
-                                    operandValue = operand.FloatingPointValue.Value.ToString();
+                                case Arm64OperandType.FloatingPoint:
+                                    operandValue = ((Arm64FloatingPointOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.Immediate:
-                                    operandValue = operand.ImmediateValue.Value.ToString("X");
+                                case Arm64OperandType.MemoryBarrierOperation:
+                                    operandValue = ((Arm64MemoryBarrierOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.MemoryBarrierOperation:
-                                    operandValue = operand.MemoryBarrierOperation.Value.ToString();
-                                    break;
-                                case Arm64InstructionOperandType.Memory:
+                                case Arm64OperandType.Memory:
                                     operandValue = "-->";
                                     break;
-                                case Arm64InstructionOperandType.MrsRegister:
-                                    operandValue = operand.MrsRegisterValue.Value.ToString();
+                                case Arm64OperandType.MrsRegister:
+                                    operandValue = ((Arm64MrsRegisterOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.MsrRegister:
-                                    operandValue = operand.MsrRegisterValue.Value.ToString();
+                                case Arm64OperandType.MsrRegister:
+                                    operandValue = ((Arm64MsrRegisterOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.PState:
-                                    operandValue = operand.PState.Value.ToString();
+                                case Arm64OperandType.PState:
+                                    operandValue = ((Arm64PStateOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.PrefetchOperation:
-                                    operandValue = operand.PrefetchOperation.Value.ToString();
+                                case Arm64OperandType.PrefetchOperation:
+                                    operandValue = ((Arm64PrefetchOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.Register:
-                                    operandValue = operand.RegisterValue.Value.ToString();
+                                case Arm64OperandType.Register:
+                                    operandValue = ((Arm64RegisterOperand)operand).Value.ToString();
                                     break;
-                                case Arm64InstructionOperandType.SysOperation:
+                                case Arm64OperandType.SysOperation:
                                     operandValue = "-->";
                                     break;
                             }
@@ -258,29 +256,30 @@ namespace CSCapstoneCli {
                             // Handle Memory Operand.
                             //
                             // ...
-                            if (operand.Type == Arm64InstructionOperandType.Memory) {
-                                Console.WriteLine("\t\t\t Base Register = {0} ", operand.MemoryValue.BaseRegister);
-                                Console.WriteLine("\t\t\t Displacement = {0:X} ", operand.MemoryValue.Displacement);
-                                Console.WriteLine("\t\t\t Index Register = {0} ", operand.MemoryValue.IndexRegister);
+                            if (operand.Type == Arm64OperandType.Memory) {
+                                Arm64MemoryOperand memoryOperand = (Arm64MemoryOperand)operand;
+                                Console.WriteLine("\t\t\t Base Register = {0} ", memoryOperand.BaseRegister);
+                                Console.WriteLine("\t\t\t Displacement = {0:X} ", memoryOperand.Displacement);
+                                Console.WriteLine("\t\t\t Index Register = {0} ", memoryOperand.IndexRegister);
                                 Console.WriteLine();
                             }
 
                             // Handle SYS Operation Operand.
                             //
                             // ...
-                            if (operand.Type == Arm64InstructionOperandType.SysOperation) {
+                            if (operand.Type == Arm64OperandType.SysOperation) {
                                 operandValue = null;
                                 switch (instruction.InstructionId) {
-                                    case Arm64Instruction.AT:
+                                    case Arm64Mnemonic.AT:
                                         operandValue = operand.AtInstructionOperation.ToString();
                                         break;
-                                    case Arm64Instruction.DC:
+                                    case Arm64Mnemonic.DC:
                                         operandValue = operand.DcInstructionOperation.ToString();
                                         break;
-                                    case Arm64Instruction.IC:
+                                    case Arm64Mnemonic.IC:
                                         operandValue = operand.IcInstructionOperation.ToString();
                                         break;
-                                    case Arm64Instruction.TLBI:
+                                    case Arm64Mnemonic.TLBI:
                                         operandValue = operand.TlbiInstructionOperation.ToString();
                                         break;
                                 }

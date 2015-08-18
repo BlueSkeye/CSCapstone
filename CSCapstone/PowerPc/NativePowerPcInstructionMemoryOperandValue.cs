@@ -7,7 +7,7 @@ namespace CSCapstone.PowerPc {
     [StructLayout(LayoutKind.Sequential)]
     public struct NativePowerPcInstructionMemoryOperandValue {
         /// <summary>
-        ///     Operand Value's Base Register.
+        ///     Operand Value's BaseRegister Register.
         /// </summary>
         public uint BaseRegister;
 

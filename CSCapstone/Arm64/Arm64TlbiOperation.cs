@@ -1,13 +1,7 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace CSCapstone.Arm64 {
-    /// <summary>
-    ///     ARM64 TLBI Instruction Operation.
-    /// </summary>
-    public enum Arm64TlbiInstructionOperation {
-        /// <summary>
-        ///     Invalid TLBI Instruction Operation.
-        /// </summary>
+﻿namespace CSCapstone.Arm64 {
+    /// <summary>ARM64 TLBI Instruction Operation.</summary>
+    public enum Arm64TlbiOperation {
+        /// <summary>Invalid TLBI Instruction Operation.</summary>
         Invalid = 0,
 
         VMALLE1IS,

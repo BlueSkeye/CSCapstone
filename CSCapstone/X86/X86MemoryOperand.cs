@@ -23,13 +23,13 @@ namespace CSCapstone.X86
         /// <summary>Operand Value's Segment Register.</summary>
         public X86Register SegmentRegister { get; private set; }
 
-        /// <summary>Operand Value's Base Register.</summary>
+        /// <summary>Operand Value's BaseRegister Register.</summary>
         public X86Register BaseRegister { get; private set; }
 
-        /// <summary>Operand Value's Index Register.</summary>
+        /// <summary>Operand Value's IndexRegister Register.</summary>
         public X86Register IndexRegister { get; private set; }
 
-        /// <summary>Operand Value's Index Register Scale.</summary>
+        /// <summary>Operand Value's IndexRegister Register Scale.</summary>
         public int IndexRegisterScale { get; private set; }
 
         /// <summary>Operand Value's Displacement Value.</summary>

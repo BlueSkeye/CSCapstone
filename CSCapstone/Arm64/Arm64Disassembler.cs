@@ -1,7 +1,9 @@
-﻿namespace CSCapstone.Arm64
+﻿using System;
+
+namespace CSCapstone.Arm64
 {
     /// <summary>Capstone ARM64 Disassembler.</summary>
-    public sealed class Arm64Disassembler : Disassembler<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>
+    public sealed class Arm64Disassembler : Disassembler<Arm64Mnemonic, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>
     {
         /// <summary>Create a Capstone ARM64 Disassembler.</summary>
         /// <param name="mode">The disassembler's mode.</param>
@@ -11,14 +13,17 @@
             return;
         }
 
-        internal override Arm64InstructionDetail CreateDetail(System.IntPtr from, ref int offset)
+        internal override Arm64InstructionDetail CreateDetail(
+            Instruction<Arm64Mnemonic, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> instruction,
+            IntPtr from, ref int offset)
         {
-            throw new System.NotImplementedException();
+            return new Arm64InstructionDetail(instruction, from, ref offset);
         }
 
-        protected override Instruction<Arm64Instruction, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> CreateInstruction(System.IntPtr nativeInstruction)
+        protected override Instruction<Arm64Mnemonic, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail> CreateInstruction(System.IntPtr nativeInstruction)
         {
-            throw new System.NotImplementedException();
+            int offset = 0;
+            return new Instruction<Arm64Mnemonic, Arm64Register, Arm64InstructionGroup, Arm64InstructionDetail>(this, nativeInstruction, ref offset);
         }
 
         /// <summary>

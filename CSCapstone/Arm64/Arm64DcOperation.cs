@@ -4,7 +4,7 @@ namespace CSCapstone.Arm64 {
     /// <summary>
     ///     ARM64 DC Instruction Operation.
     /// </summary>
-    public enum Arm64DcInstructionOperation {
+    public enum Arm64DcOperation {
         /// <summary>
         ///     Invalid DC Instruction Operation.
         /// </summary>

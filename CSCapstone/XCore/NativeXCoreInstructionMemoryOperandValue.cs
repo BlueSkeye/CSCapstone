@@ -7,12 +7,12 @@ namespace CSCapstone.XCore {
     [StructLayout(LayoutKind.Sequential)]
     public struct NativeXCoreInstructionMemoryOperandValue {
         /// <summary>
-        ///     Operand Value's Base Register.
+        ///     Operand Value's BaseRegister Register.
         /// </summary>
         public byte BaseRegister;
 
         /// <summary>
-        ///     Operand Value's Index Register.
+        ///     Operand Value's IndexRegister Register.
         /// </summary>
         public byte IndexRegister;
 

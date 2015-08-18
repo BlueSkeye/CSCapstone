@@ -1,11 +1,7 @@
 ﻿namespace CSCapstone.Arm64 {
-    /// <summary>
-    ///     ARM64 Instruction Operand Type.
-    /// </summary>
-    public enum Arm64InstructionOperandType {
-        /// <summary>
-        ///     Invalid Instruction Operand Type.
-        /// </summary>
+    /// <summary>ARM64 Instruction Operand Type.</summary>
+    public enum Arm64OperandType {
+        /// <summary>Invalid Instruction Operand Type.</summary>
         Invalid = 0,
 
         Register,

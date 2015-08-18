@@ -2,7 +2,7 @@
     /// <summary>
     ///     ARM64 AT Instruction Operation.
     /// </summary>
-    public enum Arm64AtInstructionOperation {
+    public enum Arm64AtOperation {
         S1E1R,
         S1E1W,
         S1E0R,

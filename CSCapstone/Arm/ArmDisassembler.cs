@@ -13,7 +13,9 @@ namespace CSCapstone.Arm
             return;
         }
 
-        internal override ArmInstructionDetail CreateDetail(IntPtr from, ref int offset)
+        internal override ArmInstructionDetail CreateDetail(
+            Instruction<ArmInstruction, ArmRegister, ArmInstructionGroup, ArmInstructionDetail> instruction,
+            IntPtr from, ref int offset)
         {
             return new ArmInstructionDetail(from, ref offset);
         }

@@ -17,7 +17,8 @@ namespace CSCapstone {
             return;
         }
 
-        internal abstract Detail CreateDetail(IntPtr from, ref int offset);
+        internal abstract Detail CreateDetail(Instruction<Mnemonic, Reg, Group, Detail> instruction,
+            IntPtr from, ref int offset);
 
         /// <summary>Create a Dissembled Instruction.</summary>
         /// <param name="nativeInstruction">A pointer at the memory chunk returned

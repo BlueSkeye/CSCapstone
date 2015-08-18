@@ -15,7 +15,7 @@ namespace CSCapstone {
                 ReadRegisters = ReadBlock<Reg>(12, from, ref offset);
                 WrittenRegisters = ReadBlock<Reg>(20, from, ref offset);
                 Groups = ReadBlock<Group>(8, from, ref offset);
-                ArchitectureDetail = owner.CreateDetail(from, ref offset);
+                ArchitectureDetail = owner.CreateDetail(this, from, ref offset);
             }
             return;
         }

@@ -27,25 +27,12 @@ namespace CSCapstone.Arm {
         /// <summary>Get Operand's Type.</summary>
         public abstract ArmOperandType Type { get; }
 
-        /// <summary>Get Operand's Vector Index.</summary>
+        /// <summary>Get Operand's Vector IndexRegister.</summary>
         public int VectorIndex { get; internal set; }
-
-
-
-        
-
-        /// <summary>
-        ///     Get Operand's SetEnd Value.
-        /// </summary>
-        /// <value>
-        ///     Retrieves the operand's register value if, and only if, the operand's type is
-        ///     <c>ArmInstructionOperandType.SetEnd</c>. A null reference otherwise.
-        /// </value>
-        public ArmSetEndOperandType? SetEndValue { get; internal set; }
 
         internal static ArmOperand Create(IntPtr from, ref int offset)
         {
-            // TODO : Check for this offset being valid or both 32bits and 64bits
+            // TODO : Check for this offset being valid on both 32bits and 64bits
             // version ot the Capstone DLL.
             int initialOffset = offset;
             int operandTypeOffset = offset + OperandTypeNativeOffset;
