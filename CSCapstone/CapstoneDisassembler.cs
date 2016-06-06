@@ -206,7 +206,7 @@ namespace CSCapstone {
                         if (shouldContinue) {
                             int instructionSize = (int)(address - instructionStartAddress);
                             totalSize += instructionSize;
-                            shouldContinue |= callback(NativeInstruction.Create(this, nativeInstruction),
+                            shouldContinue |= callback(NativeInstruction.Create(this, ref nativeInstruction),
                                 instructionSize, address);
                         }
                     } while (shouldContinue && (0 < (long)remainingSize));
@@ -283,8 +283,7 @@ namespace CSCapstone {
         private IEnumerable<NativeInstruction> EnumerateNativeInstructions(IntPtr pNativeArray, int size)
         {
             for (int index = 0; index < size; index++) {
-                yield return NativeInstruction.Create(this, pNativeArray);
-                pNativeArray += Marshal.SizeOf(typeof(NativeInstruction));
+                yield return NativeInstruction.Create(this, ref pNativeArray);
             }
             yield break;
         }

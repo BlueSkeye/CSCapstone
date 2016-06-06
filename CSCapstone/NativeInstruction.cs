@@ -93,10 +93,12 @@ namespace CSCapstone
 
         /// <summary>Create a managed representation of a native instruction from
         /// the given native buffer.</summary>
-        /// <param name="from">Native data to be decoded.</param>
+        /// <param name="from">Native data to be decoded. On return the native data
+        /// address is incremented to point at next instruction assuming instructions
+        /// are stored in an array, such as the one returned by cs_disasm..</param>
         /// <returns>An instance of this class.</returns>
         internal static NativeInstruction Create<Inst, Reg, Group, Detail>(
-            CapstoneDisassembler<Inst, Reg, Group, Detail> onBehalfOf, IntPtr from)
+            CapstoneDisassembler<Inst, Reg, Group, Detail> onBehalfOf, ref IntPtr from)
         {
             int offset = 0;
             // WARNING : Do not change properties initialization order. They match
@@ -110,6 +112,7 @@ namespace CSCapstone
                 ManagedOperand = Helpers.GetAnsiString(from, 160, ref offset),
             };
             IntPtr nativeDetails = Helpers.GetNativeIntPtr(from, ref offset);
+            from += offset;
             // TODO : Handle details.
             return result;
         }

@@ -18,7 +18,18 @@ namespace CSCapstone
 
         internal static string GetAnsiString(IntPtr baseAddress, uint inlineSize, ref int offset)
         {
-            try { return Marshal.PtrToStringAnsi(baseAddress + offset, (int)inlineSize).TrimEnd('\0'); }
+            try {
+                int stringLength;
+                unsafe {
+                    byte* scannedByte = (byte*)baseAddress.ToPointer() + offset;
+                    for(stringLength = 0; stringLength < inlineSize; stringLength++, scannedByte++) {
+                        if (0 == *scannedByte) { break; }
+                    }
+                }
+                return (0 == stringLength)
+                    ? string.Empty
+                    :  Marshal.PtrToStringAnsi(baseAddress + offset, stringLength);
+            }
             finally { offset += (int)inlineSize; }
         }
 

@@ -5,16 +5,10 @@ using CSCapstone.X86;
 using System;
 
 namespace CSCapstoneCli {
-    /// <summary>
-    ///     Main Program.
-    /// </summary>
+    /// <summary>Main Program.</summary>
     internal static class Program {
-        /// <summary>
-        ///     Run Main Program.
-        /// </summary>
-        /// <param name="args">
-        ///     A collection of arguments passed from the command line.
-        /// </param>
+        /// <summary>Run Main Program.</summary>
+        /// <param name="args">A collection of arguments passed from the command line.</param>
         internal static void Main(string[] args) {
             Console.WriteLine("Capstone.NET Example Application");
             Console.WriteLine("Copyright (c) 2015 Ahmed Garhy (@9ee1)");
@@ -25,9 +19,9 @@ namespace CSCapstoneCli {
             Console.SetBufferSize(80, 480);
             Console.Write("Choose an Architecture (ARM32, ARM32-V8, ARM32-Thumb, ARM32-Thumb-MClass, ARM64, X86, X86-Iter): --> ");
 
-            var architecture = Console.ReadLine();
+            string architecture = Console.ReadLine();
             Console.WriteLine();
-            switch (architecture) {
+            switch (architecture.ToUpper()) {
                 case "ARM32":
                     Program.ShowArm(DisassembleMode.Arm32);
                     break;
@@ -58,23 +52,10 @@ namespace CSCapstoneCli {
         }
 
         internal static void ShowArm(DisassembleMode mode) {
-            // Create ARM Disassembler.
-            //
-            // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
-            // when it is no longer needed.
-            using (var disassembler = new CapstoneArmDisassembler(mode)) {
-                // Enable Disassemble Details.
-                //
-                // Enables disassemble details, which are disabled by default, to provide more detailed information on
-                // disassembled binary code.
+            using (CapstoneArmDisassembler disassembler = new CapstoneArmDisassembler(mode)) {
                 disassembler.EnableDetails = true;
-
-                // Set Disassembler's Syntax.
-                //
-                // Make the disassembler generate instructions in Intel syntax.
                 disassembler.Syntax = DisassembleSyntaxOptionValue.Intel;
-
-                var code = new byte[0];
+                byte[] code = new byte[0];
                 switch (mode) {
                     case DisassembleMode.Arm32:
                         code = new byte[] {0xED, 0xFF, 0xFF, 0xEB, 0x04, 0xe0, 0x2d, 0xe5, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x83, 0x22, 0xe5, 0xf1, 0x02, 0x03, 0x0e, 0x00, 0x00, 0xa0, 0xe3, 0x02, 0x30, 0xc1, 0xe7, 0x00, 0x00, 0x53, 0xe3, 0x00, 0x02, 0x01, 0xf1, 0x05, 0x40, 0xd0, 0xe8, 0xf4, 0x80, 0x00, 0x00};
@@ -90,17 +71,11 @@ namespace CSCapstoneCli {
                         break;
                 }
 
-                // Disassemble All Binary Code.
-                //
-                // ...
                 var instructions = disassembler.Disassemble(code);
-
-                var hexCode = BitConverter.ToString(code).Replace("-", " ");
+                string hexCode = BitConverter.ToString(code).Replace("-", " ");
                 Console.WriteLine(hexCode);
                 Console.WriteLine();
 
-                // Loop Through Each Disassembled Instruction.
-                // ...
                 foreach (var instruction in instructions) {
                     Console.WriteLine("{0:X}: \t {1} \t {2}", instruction.Address, instruction.Mnemonic, instruction.Operand);
                     Console.WriteLine("\t Id = {0}", instruction.Id);
@@ -113,10 +88,7 @@ namespace CSCapstoneCli {
                         Console.WriteLine("\t Memory Barrier = {0}", instruction.ArchitectureDetail.MemoryBarrier);
                         Console.WriteLine("\t Operand Count: {0}", instruction.ArchitectureDetail.Operands.Length);
 
-                        // Loop Through Each Instruction's Operands.
-                        //
-                        // ...
-                        foreach (var operand in instruction.ArchitectureDetail.Operands) {
+                        foreach (ArmInstructionOperand operand in instruction.ArchitectureDetail.Operands) {
                             string operandValue = null;
                             switch (operand.Type) {
                                 case ArmInstructionOperandType.CImmediate:
@@ -144,12 +116,8 @@ namespace CSCapstoneCli {
                                     operandValue = operand.SysRegisterValue.Value.ToString();
                                     break;
                             }
-
                             Console.WriteLine("\t\t {0} = {1}", operand.Type, operandValue);
 
-                            // Handle Memory Operand.
-                            //
-                            // ...
                             if (operand.Type == ArmInstructionOperandType.Memory) {
                                 Console.WriteLine("\t\t\t Base Register = {0} ", operand.MemoryValue.BaseRegister);
                                 Console.WriteLine("\t\t\t Displacement = {0:X} ", operand.MemoryValue.Displacement);
@@ -178,34 +146,17 @@ namespace CSCapstoneCli {
         }
 
         internal static void ShowArm64() {
-            // Create ARM64 Disassembler.
-            //
-            // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
-            // when it is no longer needed.
-            using (var disassembler = new CapstoneArm64Disassembler(DisassembleMode.Arm32)) {
-                // Enable Disassemble Details.
-                //
-                // Enables disassemble details, which are disabled by default, to provide more detailed information on
-                // disassembled binary code.
+            using (CapstoneArm64Disassembler disassembler = new CapstoneArm64Disassembler(DisassembleMode.Arm32)) {
                 disassembler.EnableDetails = true;
-
-                // Set Disassembler's Syntax.
-                //
-                // Make the disassembler generate instructions in Intel syntax.
                 disassembler.Syntax = DisassembleSyntaxOptionValue.Intel;
 
-                // Disassemble All Binary Code.
-                //
-                // ...
-                var code = new byte[] {0x09, 0x00, 0x38, 0xd5, 0xbf, 0x40, 0x00, 0xd5, 0x0c, 0x05, 0x13, 0xd5, 0x20, 0x50, 0x02, 0x0e, 0x20, 0xe4, 0x3d, 0x0f, 0x00, 0x18, 0xa0, 0x5f, 0xa2, 0x00, 0xae, 0x9e, 0x9f, 0x37, 0x03, 0xd5, 0xbf, 0x33, 0x03, 0xd5, 0xdf, 0x3f, 0x03, 0xd5, 0x21, 0x7c, 0x02, 0x9b, 0x21, 0x7c, 0x00, 0x53, 0x00, 0x40, 0x21, 0x4b, 0xe1, 0x0b, 0x40, 0xb9, 0x20, 0x04, 0x81, 0xda, 0x20, 0x08, 0x02, 0x8b, 0x10, 0x5b, 0xe8, 0x3c};
+                byte[] code = new byte[] {0x09, 0x00, 0x38, 0xd5, 0xbf, 0x40, 0x00, 0xd5, 0x0c, 0x05, 0x13, 0xd5, 0x20, 0x50, 0x02, 0x0e, 0x20, 0xe4, 0x3d, 0x0f, 0x00, 0x18, 0xa0, 0x5f, 0xa2, 0x00, 0xae, 0x9e, 0x9f, 0x37, 0x03, 0xd5, 0xbf, 0x33, 0x03, 0xd5, 0xdf, 0x3f, 0x03, 0xd5, 0x21, 0x7c, 0x02, 0x9b, 0x21, 0x7c, 0x00, 0x53, 0x00, 0x40, 0x21, 0x4b, 0xe1, 0x0b, 0x40, 0xb9, 0x20, 0x04, 0x81, 0xda, 0x20, 0x08, 0x02, 0x8b, 0x10, 0x5b, 0xe8, 0x3c};
                 var instructions = disassembler.DisassembleAll(code, 0x2C);
 
-                var hexCode = BitConverter.ToString(code).Replace("-", " ");
+                string hexCode = BitConverter.ToString(code).Replace("-", " ");
                 Console.WriteLine(hexCode);
                 Console.WriteLine();
 
-                // Loop Through Each Disassembled Instruction.
-                // ...
                 foreach (var instruction in instructions) {
                     Console.WriteLine("{0:X}: \t {1} \t {2}", instruction.Address, instruction.Mnemonic, instruction.Operand);
                     Console.WriteLine("\t Id = {0}", instruction.Id);
@@ -214,9 +165,6 @@ namespace CSCapstoneCli {
                         Console.WriteLine("\t Code Condition = {0}", instruction.ArchitectureDetail.CodeCondition);
                         Console.WriteLine("\t Operand Count: {0}", instruction.ArchitectureDetail.Operands.Length);
 
-                        // Loop Through Each Instruction's Operands.
-                        //
-                        // ...
                         foreach (var operand in instruction.ArchitectureDetail.Operands) {
                             string operandValue = null;
                             switch (operand.Type) {
@@ -257,9 +205,6 @@ namespace CSCapstoneCli {
 
                             Console.WriteLine("\t\t {0} = {1}", operand.Type, operandValue);
 
-                            // Handle Memory Operand.
-                            //
-                            // ...
                             if (operand.Type == Arm64InstructionOperandType.Memory) {
                                 Console.WriteLine("\t\t\t Base Register = {0} ", operand.MemoryValue.BaseRegister);
                                 Console.WriteLine("\t\t\t Displacement = {0:X} ", operand.MemoryValue.Displacement);
@@ -267,9 +212,6 @@ namespace CSCapstoneCli {
                                 Console.WriteLine();
                             }
 
-                            // Handle SYS Operation Operand.
-                            //
-                            // ...
                             if (operand.Type == Arm64InstructionOperandType.SysOperation) {
                                 operandValue = null;
                                 switch (instruction.Id) {
@@ -317,25 +259,10 @@ namespace CSCapstoneCli {
         }
 
         internal static void ShowX86(bool iteratively = false) {
-            // Create X86 Disassembler.
-            //
-            // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
-            // when it is no longer needed.
-            using (var disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32)) {
-                // Enable Disassemble Details.
-                //
-                // Enables disassemble details, which are disabled by default, to provide more detailed information on
-                // disassembled binary code.
+            using (CapstoneX86Disassembler disassembler = new CapstoneX86Disassembler(DisassembleMode.Bit32)) {
                 disassembler.EnableDetails = true;
-
-                // Set Disassembler's Syntax.
-                //
-                // Make the disassembler generate instructions in Intel syntax.
                 disassembler.Syntax = DisassembleSyntaxOptionValue.Intel;
 
-                // Disassemble All Binary Code.
-                //
-                // ...
                 var code = new byte[] {0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00, 0x05, 0x23, 0x01, 0x00, 0x00, 0x36, 0x8b, 0x84, 0x91, 0x23, 0x01, 0x00, 0x00, 0x41, 0x8d, 0x84, 0x39, 0x89, 0x67, 0x00, 0x00, 0x8d, 0x87, 0x89, 0x67, 0x00, 0x00, 0xb4, 0xc6};
 
                 if (iteratively) {
@@ -348,8 +275,6 @@ namespace CSCapstoneCli {
                 Console.WriteLine(hexCode);
                 Console.WriteLine();
 
-                // Loop Through Each Disassembled Instruction.
-                // ...
                 foreach (var instruction in instructions) {
                     Console.WriteLine("{0:X}: \t {1} \t {2}", instruction.Address, instruction.Mnemonic, instruction.Operand);
                     Console.WriteLine("\t Id = {0}", instruction.Id);
@@ -362,9 +287,6 @@ namespace CSCapstoneCli {
                         Console.WriteLine("\t Mod/Rm = {0:X}", instruction.ArchitectureDetail.ModRm);
                         Console.WriteLine("\t Operand Count: {0}", instruction.ArchitectureDetail.Operands.Length);
 
-                        // Loop Through Each Instruction's Operands.
-                        //
-                        // ...
                         foreach (var operand in instruction.ArchitectureDetail.Operands) {
                             string operandValue = null;
                             switch (operand.Type) {
@@ -384,9 +306,6 @@ namespace CSCapstoneCli {
 
                             Console.WriteLine("\t\t {0} = {1}", operand.Type, operandValue);
 
-                            // Handle Memory Operand.
-                            //
-                            // ...
                             if (operand.Type == X86InstructionOperandType.Memory) {
                                 Console.WriteLine("\t\t\t Base Register = {0} ", operand.MemoryValue.BaseRegister);
                                 Console.WriteLine("\t\t\t Displacement = {0:X} ", operand.MemoryValue.Displacement);
@@ -414,8 +333,6 @@ namespace CSCapstoneCli {
                         Console.WriteLine("\t SSE Code Condition = {0}", instruction.ArchitectureDetail.SseCodeCondition);
                         Console.WriteLine("\t Suppress All AVX Exceptions? {0}", instruction.ArchitectureDetail.SuppressAllAvxExceptions);
                     }
-
-                    Console.WriteLine();
                 }
             }
         }
